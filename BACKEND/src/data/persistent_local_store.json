@@ -1,0 +1,327 @@
+{
+  "users": [
+    {
+      "id": "4de01a99-b39b-4ca6-8562-3a39f8537715",
+      "email": "testowner@smartroute.in",
+      "mobile": "9876543210",
+      "password_hash": "$2b$10$HnfYbiLSQxZCSY9mv.rra.zz0xqWh1teKE6ZyWkLKn.VDfJB8yWYu",
+      "first_name": "Test",
+      "last_name": "Owner",
+      "role": "travel_owner",
+      "status": "active",
+      "operator_code": "APEX",
+      "license_number": null,
+      "email_verified": true,
+      "mobile_verified": true,
+      "travel_id": "90d203eb-99cd-40d7-a99b-560e5b77d1e2",
+      "created_at": "2026-10-22T05:29:55.849Z",
+      "updated_at": "2026-10-22T05:29:55.849Z"
+    },
+    {
+      "id": "d094374a-2249-4dbc-a98c-e287098599f1",
+      "email": "hudsce@gmail.com",
+      "mobile": "1029384756",
+      "password_hash": "$2a$12$f2p9aXfoOS5SrDHljFUnxuzUJTTAC8bt8fGZQutJz1C8X9mEi0HEC",
+      "first_name": "Hussain",
+      "last_name": null,
+      "role": "passenger",
+      "status": "active",
+      "operator_code": null,
+      "license_number": null,
+      "email_verified": false,
+      "mobile_verified": false,
+      "travel_id": null,
+      "created_at": "2026-11-04T10:00:49.978Z",
+      "updated_at": "2026-11-04T10:00:49.978Z"
+    }
+  ],
+  "travels": [
+    {
+      "id": "90d203eb-99cd-40d7-a99b-560e5b77d1e2",
+      "owner_id": "4de01a99-b39b-4ca6-8562-3a39f8537715",
+      "name": "Apex Royal Travels",
+      "slug": "apex-royal-travels",
+      "business_name": "Apex Royal Mobility Pvt Ltd",
+      "gst_number": "33AABCS8891M1ZT",
+      "contact_email": "testowner@smartroute.in",
+      "contact_mobile": "9876543210",
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "pincode": "600001",
+      "business_address": null,
+      "website": null,
+      "verification_status": "pending",
+      "status": "active",
+      "badge": "New Operator",
+      "rating": 0,
+      "reviews_count": 0,
+      "description": "Apex Royal Travels — Newly registered travel operator",
+      "created_at": "2026-10-22T05:29:55.849Z",
+      "updated_at": "2026-10-22T05:29:55.849Z"
+    },
+    {
+      "id": "abf8c72a-1f84-4ef8-91d4-bc5001067198",
+      "owner_id": "017e93ea-8e08-4088-b91f-85d66b123f07",
+      "name": "Royal Express Travels",
+      "slug": "royal-express-travels",
+      "business_name": "Royal Express Mobility Pvt.Ltd",
+      "gst_number": "33AABCS8891M1ZT",
+      "contact_email": "retoperator@company.in",
+      "contact_mobile": "5647382910",
+      "city": "Coimbatore",
+      "state": "Tamil Nadu",
+      "pincode": "641018",
+      "business_address": "143, Avinashi Road, Omni Bus Stand Complex",
+      "website": "https://royalexpress.in",
+      "verification_status": "pending",
+      "status": "active",
+      "badge": "New Operator",
+      "rating": 0,
+      "reviews_count": 0,
+      "description": "Royal Express Travels — Newly registered travel operator",
+      "created_at": "2026-10-22T08:14:47.966Z",
+      "updated_at": "2026-10-22T08:14:47.966Z"
+    },
+    {
+      "id": "b7666361-e180-4979-bd04-97c61987e4f3",
+      "owner_id": "2e56baf7-07be-45dd-ad4e-ebd8f7849157",
+      "name": "S.R Travels",
+      "slug": "s-r-travels",
+      "business_name": "S.R Express.Pvt.Ltd",
+      "gst_number": "54SRANA6713AIY6R",
+      "contact_email": "srtexpress@co.ac.in",
+      "contact_mobile": "1029384756",
+      "city": "Tenkasi",
+      "state": "Tamil Nadu",
+      "pincode": "627 812",
+      "business_address": "T.M Street, Vadakarai",
+      "website": "https://srtexpress.ac.in",
+      "verification_status": "pending",
+      "status": "active",
+      "badge": "New Operator",
+      "rating": 0,
+      "reviews_count": 0,
+      "description": "S.R Travels — Newly registered travel operator",
+      "created_at": "2026-10-23T09:08:01.112Z",
+      "updated_at": "2026-10-23T09:08:01.112Z"
+    },
+    {
+      "id": "69fd55b3-a98d-40ab-8018-c33b503e7e5b",
+      "owner_id": "8f618a1e-a3c9-487b-aedf-57bf03ee1ba8",
+      "name": "Tranzking Travel Express",
+      "slug": "tranzking-travel-express",
+      "business_name": "Tranzking Express.Pvt.Ltd",
+      "gst_number": "33AABCS8891M1ZT",
+      "contact_email": "sadhana@tranzkingoperator.ac.in",
+      "contact_mobile": "9457201855",
+      "city": "Coimbatore",
+      "state": "Tamil Nadu",
+      "pincode": "641018",
+      "business_address": null,
+      "website": "http://tranzkingexpress.ac.in",
+      "verification_status": "pending",
+      "status": "active",
+      "badge": "New Operator",
+      "rating": 0,
+      "reviews_count": 0,
+      "description": "Tranzking Travel Express — Newly registered travel operator",
+      "created_at": "2026-10-28T05:55:00.827Z",
+      "updated_at": "2026-10-28T05:55:00.827Z"
+    }
+  ],
+  "buses": [],
+  "trips": [],
+  "bookings": [
+    {
+      "id": "bkg-sr-cancel-full",
+      "pnr_number": "SR-FULL-REFUND",
+      "travel_id": "trv-smartroute-001",
+      "trip_id": "trp-sr-cbe-100",
+      "user_id": "usr-passenger-001",
+      "boarding_stop_id": "stop-101",
+      "dropping_stop_id": "stop-110",
+      "total_fare": 1500,
+      "booking_status": "cancelled",
+      "payment_status": "refunded",
+      "discount_amount": 0,
+      "refund_amount": 1500,
+      "contact_name": "Dinesh Karthik",
+      "contact_email": "dinesh@test.com",
+      "contact_mobile": "9840112233",
+      "created_at": "2026-10-27T05:36:53.631Z",
+      "passengers": [
+        {
+          "id": "pax-cf-1",
+          "seat_number": "U5",
+          "passenger_name": "Dinesh Karthik",
+          "fare": 1500
+        }
+      ]
+    },
+    {
+      "id": "bkg-sr-partial-ref",
+      "pnr_number": "SR-PARTIAL-REFUND",
+      "travel_id": "trv-smartroute-001",
+      "trip_id": "trp-sr-cbe-100",
+      "user_id": "usr-passenger-002",
+      "boarding_stop_id": "stop-101",
+      "dropping_stop_id": "stop-110",
+      "total_fare": 2000,
+      "booking_status": "partially_cancelled",
+      "payment_status": "partially_refunded",
+      "discount_amount": 100,
+      "refund_amount": 900,
+      "contact_name": "Priya Mani",
+      "contact_email": "priya@test.com",
+      "contact_mobile": "9840223344",
+      "created_at": "2026-10-27T05:36:53.631Z",
+      "passengers": [
+        {
+          "id": "pax-pr-1",
+          "seat_number": "L7",
+          "passenger_name": "Priya Mani",
+          "fare": 1000
+        },
+        {
+          "id": "pax-pr-2",
+          "seat_number": "L8",
+          "passenger_name": "Deepa Mani",
+          "fare": 1000,
+          "is_cancelled": true
+        }
+      ]
+    },
+    {
+      "id": "bkg-sr-failed-pay",
+      "pnr_number": "SR-FAILED-PAY",
+      "travel_id": "trv-smartroute-001",
+      "trip_id": "trp-sr-cbe-100",
+      "user_id": "usr-passenger-001",
+      "boarding_stop_id": "stop-101",
+      "dropping_stop_id": "stop-110",
+      "total_fare": 880,
+      "booking_status": "failed",
+      "payment_status": "failed",
+      "discount_amount": 0,
+      "refund_amount": 0,
+      "contact_name": "Ramesh Sundar",
+      "contact_email": "ramesh@test.com",
+      "contact_mobile": "9840334455",
+      "created_at": "2026-10-26T05:36:53.631Z",
+      "passengers": [
+        {
+          "id": "pax-fp-1",
+          "seat_number": "L9",
+          "passenger_name": "Ramesh Sundar",
+          "fare": 880
+        }
+      ]
+    },
+    {
+      "id": "bkg-sr-corp-bulk",
+      "pnr_number": "SR-CORP-401",
+      "travel_id": "trv-smartroute-001",
+      "trip_id": "trp-sr-cbe-100",
+      "user_id": "usr-passenger-001",
+      "boarding_stop_id": "stop-101",
+      "dropping_stop_id": "stop-110",
+      "total_fare": 10560,
+      "discount_amount": 560,
+      "refund_amount": 0,
+      "booking_status": "confirmed",
+      "payment_status": "paid",
+      "contact_name": "Tech Mahindra Group Travel",
+      "contact_email": "grouptravel@techm.com",
+      "contact_mobile": "9840556677",
+      "created_at": "2026-10-27T05:36:53.631Z",
+      "passengers": [
+        {
+          "id": "pax-corp-1",
+          "seat_number": "U1",
+          "passenger_name": "TechM Employee 1",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-2",
+          "seat_number": "U2",
+          "passenger_name": "TechM Employee 2",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-3",
+          "seat_number": "U3",
+          "passenger_name": "TechM Employee 3",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-4",
+          "seat_number": "U4",
+          "passenger_name": "TechM Employee 4",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-5",
+          "seat_number": "U5",
+          "passenger_name": "TechM Employee 5",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-6",
+          "seat_number": "U6",
+          "passenger_name": "TechM Employee 6",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-7",
+          "seat_number": "U7",
+          "passenger_name": "TechM Employee 7",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-8",
+          "seat_number": "U8",
+          "passenger_name": "TechM Employee 8",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-9",
+          "seat_number": "U9",
+          "passenger_name": "TechM Employee 9",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-10",
+          "seat_number": "U10",
+          "passenger_name": "TechM Employee 10",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-11",
+          "seat_number": "U11",
+          "passenger_name": "TechM Employee 11",
+          "fare": 880,
+          "is_boarded": true
+        },
+        {
+          "id": "pax-corp-12",
+          "seat_number": "U12",
+          "passenger_name": "TechM Employee 12",
+          "fare": 880,
+          "is_boarded": true
+        }
+      ]
+    }
+  ],
+  "payments": [],
+  "refunds": []
+}

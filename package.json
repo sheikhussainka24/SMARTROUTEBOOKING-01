@@ -1,0 +1,35 @@
+{
+  "name": "smartroute-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"BACKEND,FRONTEND\" -c \"cyan,magenta\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --prefix BACKEND",
+    "dev:frontend": "npm run dev --prefix FRONTEND",
+    "backend": "npm run dev --prefix BACKEND",
+    "server": "npm run dev --prefix BACKEND",
+    "frontend": "npm run dev --prefix FRONTEND",
+    "client": "npm run dev --prefix FRONTEND",
+    "start": "npm run dev",
+    "test": "npm test --prefix BACKEND",
+    "build:frontend": "npm run build --prefix FRONTEND",
+    "migrate": "npm run migrate --prefix BACKEND",
+    "migrate:json": "npm run migrate:json --prefix BACKEND",
+    "admin:bootstrap": "npm run admin:bootstrap --prefix BACKEND",
+    "seed": "npm run seed --prefix BACKEND"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^10.0.6"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.7",
+    "nodemailer": "^10.0.16",
+    "pg": "^8.23.1",
+    "twilio": "^6.1.2",
+    "uuid": "^14.0.3"
+  }
+}

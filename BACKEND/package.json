@@ -1,0 +1,58 @@
+{
+  "name": "smartroute-server",
+  "version": "1.0.0",
+  "description": "SMART ROUTE - Private Bus Booking & Travel Operations Platform (Backend)",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "server": "node src/server.js",
+    "backend": "node src/server.js",
+    "migrate": "knex migrate:latest --knexfile knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
+    "migrate:make": "knex migrate:make --knexfile knexfile.js",
+    "migrate:json": "node scripts/migrateJsonToPostgres.js",
+    "admin:bootstrap": "node scripts/bootstrapSuperAdmin.js",
+    "seed": "knex seed:run --knexfile knexfile.js",
+    "seed:make": "knex seed:make --knexfile knexfile.js",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --forceExit --detectOpenHandles"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/../TESTS"
+    ],
+    "testMatch": [
+      "**/*.test.js"
+    ],
+    "transform": {}
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.15",
+    "pdfkit": "^0.20.2",
+    "pg": "^8.12.0",
+    "pg-mem": "^3.0.14",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.7.5",
+    "uuid": "^10.0.0",
+    "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "socket.io-client": "^4.8.4",
+    "supertest": "^7.0.0"
+  }
+}

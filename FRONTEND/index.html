@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#E11D48" />
+    <meta name="description" content="Official SMART ROUTE BOOKING platform — Luxury 2+1 sleeper coaches, live GPS radar telemetry, and instant electronic boarding passes." />
+    <!-- OpenGraph Metadata -->
+    <meta property="og:title" content="SMART ROUTE BOOKING — Luxury Intercity Bus Operations" />
+    <meta property="og:description" content="Official luxury coach mobility platform with real-time GPS tracking and instant ticket booking." />
+    <meta property="og:image" content="/assets/smart-route-official-logo.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SMART ROUTE BOOKING" />
+    <meta name="twitter:image" content="/assets/smart-route-official-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMART ROUTE BOOKING — Luxury Intercity Bus Operations & Live GPS Radar</title>
+    <!-- Modern typography from Google Fonts: Dancing Script (Script Accent), Plus Jakarta Sans (Display), Inter (Body UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS Script -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind = window.tailwind || {};
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Plus Jakarta Sans', 'sans-serif'],
+              script: ['Dancing Script', 'cursive'],
+            },
+            colors: {
+              plum: {
+                900: '#24152D',
+                600: '#6E5D73',
+              },
+              brandPink: {
+                DEFAULT: '#C13D78',
+                light: '#FFF1F6',
+                border: '#E7A0BF',
+              },
+              coral: {
+                500: '#EF4444',
+                600: '#E11D48',
+              },
+              darkTeal: '#042F2E',
+              darkSlate: '#0F172A',
+            }
+          }
+        }
+      };
+    </script>
+    <!-- Leaflet CSS for real interactive maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
