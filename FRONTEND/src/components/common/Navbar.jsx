@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import BrandLogo from './BrandLogo.jsx';
 import { SocketStatusBadge } from '../../context/SocketContext.jsx';
+import { getRoleRedirect } from '../../utils/roleRoutes.js';
 
 // Official brand accent palette: Coral Red (#EF4444) & Legacy Plum Accent (#C13D78)
 const BRAND_ACCENT_CORAL = '#EF4444';
@@ -453,7 +454,33 @@ export default function Navbar() {
 
             {isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div
+                {user?.role && user?.role !== 'passenger' && (
+                  <Link
+                    to={getRoleRedirect(user.role)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 5,
+                      background: '#FFF1F6',
+                      border: '1px solid #E7A0BF',
+                      color: '#C13D78',
+                      fontSize: 11,
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      padding: '5px 12px',
+                      borderRadius: 20,
+                      textDecoration: 'none',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title={`Access ${user.role.replace(/_/g, ' ')} Portal`}
+                  >
+                    <Shield size={12} />
+                    <span>{user.role.replace(/_/g, ' ')}</span>
+                  </Link>
+                )}
+                <Link
+                  to="/my-tickets"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -462,7 +489,10 @@ export default function Navbar() {
                     padding: '5px 12px',
                     borderRadius: 20,
                     border: '1px solid #E2E8F0',
+                    textDecoration: 'none',
+                    transition: 'all 0.15s ease',
                   }}
+                  title="View My Tickets & Account"
                 >
                   <div
                     style={{
@@ -483,7 +513,7 @@ export default function Navbar() {
                   <span style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>
                     {user?.first_name || user?.name || 'Account'}
                   </span>
-                </div>
+                </Link>
 
                 <button
                   type="button"
@@ -637,6 +667,28 @@ export default function Navbar() {
             >
               PNR Search
             </Link>
+            {isAuthenticated && user?.role && user?.role !== 'passenger' && (
+              <Link
+                to={getRoleRedirect(user.role)}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  color: '#C13D78',
+                  fontSize: 14,
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 12px',
+                  background: '#FFF1F6',
+                  borderRadius: 10,
+                  border: '1px solid #E7A0BF',
+                }}
+              >
+                <Shield size={16} />
+                <span>{user.role.replace(/_/g, ' ').toUpperCase()} PORTAL</span>
+              </Link>
+            )}
             {!isAuthenticated && (
               <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
                 <Link

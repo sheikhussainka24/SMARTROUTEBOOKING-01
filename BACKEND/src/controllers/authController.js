@@ -4,6 +4,8 @@ import db, { isDbConnected, isDurableStorageRequired } from '../config/database.
 import config from '../config/index.js';
 import logger from '../config/logger.js';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../middleware/auth.js';
+import { revokeUserSession } from '../auth/tokenService.js';
+import { setAuthCookies, clearAuthCookies } from '../middleware/cookieMiddleware.js';
 import { createAuditLog } from '../services/auditService.js';
 import {
   findUserByCredentials,
@@ -11,11 +13,12 @@ import {
   findUserByEmail,
   findUserByMobile,
   registerUserData,
+  updateUserInStore,
   travels,
   users,
 } from '../services/dataStore.js';
 import { validatePasswordStrength, hashPassword, comparePassword } from '../auth/passwordPolicy.js';
-import { generateOTP, hashOTP, verifyOTP, getOTPExpiry } from '../auth/otpService.js';
+import { generateOTP, hashOTP, verifyOTP, getOTPExpiry, checkOtpRateLimit, recordOtpSent, OTP_MAX_ATTEMPTS } from '../auth/otpService.js';
 import smtpMailer from '../../../NOTIFICATIONS/email/smtpMailer.js';
 import smsGateway from '../../../NOTIFICATIONS/sms/smsGateway.js';
 import {
@@ -31,6 +34,47 @@ import {
 
 const inMemoryOtps = new Map();
 const lastOtpSentTimes = new Map();
+
+// Failed login attempt tracking: key -> { count: number, firstAttempt: number, lockedUntil: number | null }
+const loginAttemptTracker = new Map();
+export const MAX_LOGIN_ATTEMPTS = 5;
+export const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
+
+export function checkLoginLockout(key) {
+  const record = loginAttemptTracker.get(key);
+  if (!record) return { locked: false };
+  const now = Date.now();
+  if (record.lockedUntil && record.lockedUntil > now) {
+    const remainingSeconds = Math.ceil((record.lockedUntil - now) / 1000);
+    return { locked: true, remainingSeconds };
+  }
+  if (record.lockedUntil && record.lockedUntil <= now) {
+    loginAttemptTracker.delete(key);
+    return { locked: false };
+  }
+  return { locked: false };
+}
+
+export function recordFailedLogin(key) {
+  const now = Date.now();
+  const record = loginAttemptTracker.get(key) || { count: 0, firstAttempt: now, lockedUntil: null };
+  if (now - record.firstAttempt > LOCKOUT_DURATION_MS) {
+    record.count = 1;
+    record.firstAttempt = now;
+    record.lockedUntil = null;
+  } else {
+    record.count += 1;
+  }
+  if (record.count >= MAX_LOGIN_ATTEMPTS) {
+    record.lockedUntil = now + LOCKOUT_DURATION_MS;
+  }
+  loginAttemptTracker.set(key, record);
+  return record;
+}
+
+export function clearFailedLogins(key) {
+  loginAttemptTracker.delete(key);
+}
 
 /**
  * Register a new user
@@ -534,15 +578,40 @@ export async function login(req, res) {
       });
     }
 
+    // Check brute force account lockout
+    const lockoutKey = cleanMobile || cleanEmail || loginInput;
+    const lockout = checkLoginLockout(lockoutKey);
+    if (lockout.locked) {
+      return res.status(429).json({
+        success: false,
+        error: `Too many failed login attempts. Your account is temporarily locked for ${Math.ceil(lockout.remainingSeconds / 60)} minutes for your security.`,
+        code: 'ACCOUNT_LOCKED',
+        retryAfter: lockout.remainingSeconds,
+      });
+    }
+
     // Verify password with bcrypt
     const isPasswordValid = await comparePassword(password, user.password_hash);
     if (!isPasswordValid) {
+      const lockRecord = recordFailedLogin(lockoutKey);
+      if (lockRecord.lockedUntil) {
+        return res.status(429).json({
+          success: false,
+          error: 'Too many failed login attempts. Your account has been temporarily locked for 15 minutes.',
+          code: 'ACCOUNT_LOCKED',
+          retryAfter: 900,
+        });
+      }
       return res.status(401).json({
         success: false,
         error: 'Invalid mobile/email or password',
         code: 'INVALID_CREDENTIALS',
+        attemptsRemaining: Math.max(0, MAX_LOGIN_ATTEMPTS - lockRecord.count),
       });
     }
+
+    // Clear failed login tracker on successful password match
+    clearFailedLogins(lockoutKey);
 
     // If passenger: require Step 2 OTP verification (Never issue tokens at Step 1!)
     if (user.role === 'passenger') {
@@ -656,6 +725,8 @@ export async function login(req, res) {
         logger.warn('DB update last login error:', dbErr.message);
       }
     }
+    updateUserInStore(user.id, { refresh_token: refreshToken });
+    setAuthCookies(res, { accessToken, refreshToken });
 
     const userProfile = {
       id: user.id,
@@ -837,6 +908,9 @@ export async function verifyLoginOtp(req, res) {
         logger.warn('DB update refresh token error:', dbErr.message);
       }
     }
+    clearFailedLogins(cleanMobile);
+    updateUserInStore(user.id, { refresh_token: refreshToken });
+    setAuthCookies(res, { accessToken, refreshToken });
 
     await createAuditLog({
       userId: user.id,
@@ -1166,26 +1240,36 @@ export async function resendEmailVerification(req, res) {
  */
 export async function logout(req, res) {
   try {
-    if (isDbConnected()) {
-      try {
-        await db('users').where('id', req.user.id).update({
-          refresh_token: null,
-          refresh_token_expires_at: null,
-        });
+    if (req.user?.id) {
+      revokeUserSession(req.user.id);
+      updateUserInStore(req.user.id, {
+        refresh_token: null,
+        refresh_token_expires_at: null,
+      });
 
-        await createAuditLog({
-          userId: req.user.id,
-          userRole: req.user.role,
-          action: 'logout',
-          resourceType: 'user',
-          resourceId: req.user.id,
-          ipAddress: req.ip,
-          userAgent: req.get('user-agent'),
-        });
-      } catch (dbErr) {
-        logger.warn('Logout DB audit warning:', dbErr.message);
+      if (isDbConnected()) {
+        try {
+          await db('users').where('id', req.user.id).update({
+            refresh_token: null,
+            refresh_token_expires_at: null,
+          });
+
+          await createAuditLog({
+            userId: req.user.id,
+            userRole: req.user.role,
+            action: 'logout',
+            resourceType: 'user',
+            resourceId: req.user.id,
+            ipAddress: req.ip,
+            userAgent: req.get('user-agent'),
+          });
+        } catch (dbErr) {
+          logger.warn('Logout DB audit warning:', dbErr.message);
+        }
       }
     }
+
+    clearAuthCookies(res);
 
     return res.json({
       success: true,
@@ -1481,7 +1565,7 @@ export async function verifyOtp(req, res) {
 
 export const refreshToken = async (req, res) => {
   try {
-    const { refreshToken: token } = req.body;
+    const token = req.body?.refreshToken || req.cookies?.smartroute_refresh_token;
     if (!token) {
       return res.status(400).json({
         success: false,
@@ -1516,6 +1600,26 @@ export const refreshToken = async (req, res) => {
       });
     }
 
+    // Refresh Token Reuse / Replay Detection:
+    // If user has a stored refresh token and it does not match the submitted token,
+    // this indicates an attempt to reuse an already-rotated or compromised token.
+    const storedToken = user.refresh_token;
+    if (storedToken && storedToken !== token) {
+      logger.warn(`Potential refresh token reuse detected for user ${userId}. Revoking session.`);
+      revokeUserSession(userId);
+      if (isDbConnected()) {
+        await db('users').where('id', userId).update({ refresh_token: null }).catch(() => {});
+      }
+      updateUserInStore(userId, { refresh_token: null });
+      clearAuthCookies(res);
+      return res.status(403).json({
+        success: false,
+        error: 'Token reuse detected. All sessions have been revoked for your security.',
+        code: 'REFRESH_TOKEN_REUSED',
+      });
+    }
+
+    // Token Rotation: Generate new token pair
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
@@ -1531,6 +1635,8 @@ export const refreshToken = async (req, res) => {
         logger.warn('DB update refresh token error:', dbErr.message);
       }
     }
+    updateUserInStore(user.id, { refresh_token: newRefreshToken });
+    setAuthCookies(res, { accessToken: newAccessToken, refreshToken: newRefreshToken });
 
     const userProfile = {
       id: user.id,
@@ -1565,4 +1671,467 @@ export const refreshToken = async (req, res) => {
     });
   }
 };
+
+/**
+ * Forgot Password — Initiates password reset via 6-digit OTP
+ * POST /api/auth/forgot-password
+ */
+export async function forgotPassword(req, res) {
+  try {
+    const { identifier, email, mobile } = req.body;
+    const input = identifier || email || mobile;
+    if (!input) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email address or mobile number is required',
+        code: 'MISSING_IDENTIFIER',
+      });
+    }
+
+    const cleanInput = String(input).trim();
+    const rateCheck = checkOtpRateLimit(`forgot:${cleanInput}`, 60000);
+    if (!rateCheck.allowed) {
+      return res.status(429).json({
+        success: false,
+        error: `Please wait ${rateCheck.retryAfter}s before requesting another reset code`,
+        code: 'RATE_LIMIT_EXCEEDED',
+        retryAfter: rateCheck.retryAfter,
+      });
+    }
+
+    let user = null;
+    let targetMobile = null;
+    let targetEmail = null;
+
+    if (cleanInput.includes('@')) {
+      targetEmail = cleanInput.toLowerCase();
+      if (isDbConnected()) {
+        user = await db('users').where('email', targetEmail).whereNull('deleted_at').first().catch(() => null);
+      }
+      if (!user) user = findUserByEmail(targetEmail);
+      if (user && user.mobile) targetMobile = String(user.mobile).replace(/\D/g, '').slice(-10);
+    } else {
+      targetMobile = cleanInput.replace(/\D/g, '').slice(-10);
+      if (isDbConnected()) {
+        user = await db('users').where('mobile', targetMobile).whereNull('deleted_at').first().catch(() => null);
+      }
+      if (!user) user = findUserByMobile(targetMobile);
+      if (user && user.email) targetEmail = user.email;
+    }
+
+    recordOtpSent(`forgot:${cleanInput}`);
+
+    // If user not found, respond with generic message to prevent enumeration
+    if (!user) {
+      return res.json({
+        success: true,
+        message: 'If an account exists with this email or mobile, a password reset code has been sent.',
+      });
+    }
+
+    const resetOtp = generateOTP();
+    const resetOtpHash = await hashPassword(resetOtp);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    const targetKey = targetMobile || targetEmail || cleanInput;
+    inMemoryOtps.set(`${targetKey}:password_reset`, {
+      otpHash: resetOtpHash,
+      otp: resetOtp,
+      expiresAt,
+      used: false,
+      attempts: 0,
+      userId: user.id,
+      createdAt: new Date(),
+    });
+
+    if (isDbConnected()) {
+      try {
+        await db('otps')
+          .where({ identifier: targetKey, purpose: 'password_reset', used: false })
+          .update({ used: true });
+
+        await db('otps').insert({
+          user_id: user.id,
+          identifier: targetKey,
+          otp_hash: resetOtpHash,
+          purpose: 'password_reset',
+          expires_at: expiresAt,
+        });
+      } catch (dbErr) {
+        logger.warn('DB OTP insert error for password reset:', dbErr.message);
+      }
+    }
+
+    let deliveryNotice = 'Reset code sent to your registered contact.';
+    if (targetEmail && smtpMailer.isConfigured()) {
+      await smtpMailer.sendEmail({
+        to: targetEmail,
+        subject: 'SMART ROUTE — Password Reset Code',
+        text: `Your password reset code is ${resetOtp}. Valid for 10 minutes. Do not share this code.`,
+      }).catch((e) => logger.warn('Reset email send error:', e.message));
+      deliveryNotice = 'Reset code sent to your registered email address.';
+    } else if (targetMobile && smsGateway.isConfigured()) {
+      await smsGateway.sendSMS(
+        `+91${targetMobile}`,
+        `Your SMART ROUTE password reset code is ${resetOtp}. Valid for 10 minutes.`
+      ).catch((e) => logger.warn('Reset SMS send error:', e.message));
+      deliveryNotice = 'Reset code sent to your registered mobile number.';
+    }
+
+    const isDev = process.env.NODE_ENV !== 'production';
+    return res.json({
+      success: true,
+      message: deliveryNotice,
+      ...(isDev ? { devOtp: resetOtp } : {}),
+    });
+  } catch (error) {
+    logger.error('Forgot password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to process password reset request',
+      code: 'FORGOT_PASSWORD_ERROR',
+    });
+  }
+}
+
+/**
+ * Reset Password — Verifies OTP and updates password
+ * POST /api/auth/reset-password
+ */
+export async function resetPassword(req, res) {
+  try {
+    const { identifier, email, mobile, otp, newPassword, confirmPassword } = req.body;
+    const input = identifier || email || mobile;
+
+    if (!input || !otp || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Identifier, OTP code, and new password are required',
+        code: 'MISSING_FIELDS',
+      });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Passwords do not match. Please verify both password fields.',
+        code: 'PASSWORD_MISMATCH',
+      });
+    }
+
+    const strengthCheck = validatePasswordStrength(newPassword);
+    if (!strengthCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        error: strengthCheck.message,
+        code: 'WEAK_PASSWORD',
+      });
+    }
+
+    const cleanInput = String(input).trim();
+    const cleanMobile = cleanInput.replace(/\D/g, '').slice(-10);
+    const cleanEmail = cleanInput.includes('@') ? cleanInput.toLowerCase() : null;
+    const targetKey = cleanMobile || cleanEmail || cleanInput;
+
+    let record = inMemoryOtps.get(`${targetKey}:password_reset`);
+    if (!record && cleanEmail) {
+      record = inMemoryOtps.get(`${cleanEmail}:password_reset`);
+    }
+
+    if (!record && isDbConnected()) {
+      try {
+        const dbRecord = await db('otps')
+          .where({ purpose: 'password_reset', used: false })
+          .where(function () {
+            this.where('identifier', targetKey).orWhere('identifier', cleanInput);
+          })
+          .where('expires_at', '>', new Date())
+          .orderBy('created_at', 'desc')
+          .first();
+
+        if (dbRecord) {
+          record = {
+            id: dbRecord.id,
+            otpHash: dbRecord.otp_hash,
+            expiresAt: dbRecord.expires_at,
+            used: dbRecord.used,
+            attempts: dbRecord.attempts || 0,
+            userId: dbRecord.user_id,
+          };
+        }
+      } catch (dbErr) {
+        logger.warn('DB OTP lookup error in resetPassword:', dbErr.message);
+      }
+    }
+
+    if (!record || record.used) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password reset code is invalid or has already been used. Please request a new code.',
+        code: 'OTP_INVALID',
+      });
+    }
+
+    if (new Date() > new Date(record.expiresAt)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password reset code has expired. Please request a new code.',
+        code: 'OTP_EXPIRED',
+      });
+    }
+
+    if (record.attempts >= 5) {
+      record.used = true;
+      return res.status(429).json({
+        success: false,
+        error: 'Maximum verification attempts exceeded. Please request a new code.',
+        code: 'OTP_MAX_ATTEMPTS',
+      });
+    }
+
+    record.attempts = (record.attempts || 0) + 1;
+    if (record.id && isDbConnected()) {
+      await db('otps').where('id', record.id).increment('attempts', 1).catch(() => {});
+    }
+
+    const isDev = process.env.NODE_ENV !== 'production';
+    const cleanOtp = String(otp).trim();
+    const isMatch = (isDev && cleanOtp === record.otp) || await comparePassword(cleanOtp, record.otpHash);
+
+    if (!isMatch) {
+      if (record.attempts >= 5) {
+        record.used = true;
+        if (record.id && isDbConnected()) {
+          await db('otps').where('id', record.id).update({ used: true }).catch(() => {});
+        }
+        return res.status(429).json({
+          success: false,
+          error: 'Maximum verification attempts exceeded. Code has been invalidated.',
+          code: 'OTP_MAX_ATTEMPTS',
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid password reset code. Please check and try again.',
+        code: 'OTP_WRONG',
+        attemptsRemaining: Math.max(0, 5 - record.attempts),
+      });
+    }
+
+    // Mark OTP as used
+    record.used = true;
+    if (record.id && isDbConnected()) {
+      await db('otps').where('id', record.id).update({ used: true }).catch(() => {});
+    }
+
+    // Retrieve user
+    let user = null;
+    const userId = record.userId;
+    if (userId) {
+      if (isDbConnected()) {
+        user = await db('users').where('id', userId).first().catch(() => null);
+      }
+      if (!user) user = findUserById(userId);
+    }
+    if (!user) {
+      if (cleanEmail) {
+        user = findUserByEmail(cleanEmail);
+      } else if (cleanMobile) {
+        user = findUserByMobile(cleanMobile);
+      }
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User account not found',
+        code: 'USER_NOT_FOUND',
+      });
+    }
+
+    // Hash new password using bcrypt (salt rounds >= 12)
+    const newPasswordHash = await hashPassword(newPassword);
+
+    // Update password in DB and in dataStore
+    if (isDbConnected()) {
+      try {
+        await db('users').where('id', user.id).update({
+          password_hash: newPasswordHash,
+          refresh_token: null,
+          refresh_token_expires_at: null,
+          updated_at: new Date(),
+        });
+      } catch (dbErr) {
+        logger.warn('DB password update error in resetPassword:', dbErr.message);
+      }
+    }
+    updateUserInStore(user.id, {
+      password_hash: newPasswordHash,
+      refresh_token: null,
+      refresh_token_expires_at: null,
+    });
+
+    // Revoke all existing sessions and clear cookies
+    revokeUserSession(user.id);
+    clearAuthCookies(res);
+
+    // Audit log
+    await createAuditLog({
+      userId: user.id,
+      userRole: user.role,
+      action: 'password_reset',
+      resourceType: 'user',
+      resourceId: user.id,
+      ipAddress: req.ip,
+      userAgent: req.get('user-agent'),
+    }).catch(() => {});
+
+    return res.json({
+      success: true,
+      message: 'Password has been reset successfully. Please sign in with your new password.',
+    });
+  } catch (error) {
+    logger.error('Reset password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to reset password',
+      code: 'RESET_PASSWORD_ERROR',
+    });
+  }
+}
+
+/**
+ * Change Password — Authenticated user updates password
+ * POST /api/auth/change-password
+ */
+export async function changePassword(req, res) {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required',
+        code: 'AUTH_REQUIRED',
+      });
+    }
+
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Current password and new password are required',
+        code: 'MISSING_FIELDS',
+      });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Passwords do not match. Please verify both password fields.',
+        code: 'PASSWORD_MISMATCH',
+      });
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'New password must be different from your current password',
+        code: 'PASSWORD_SAME_AS_CURRENT',
+      });
+    }
+
+    const strengthCheck = validatePasswordStrength(newPassword);
+    if (!strengthCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        error: strengthCheck.message,
+        code: 'WEAK_PASSWORD',
+      });
+    }
+
+    let user = null;
+    if (isDbConnected()) {
+      user = await db('users').where('id', userId).first().catch(() => null);
+    }
+    if (!user) user = findUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User account not found',
+        code: 'USER_NOT_FOUND',
+      });
+    }
+
+    // Verify current password
+    const isCurrentValid = await comparePassword(currentPassword, user.password_hash);
+    if (!isCurrentValid) {
+      return res.status(400).json({
+        success: false,
+        error: 'Current password is incorrect',
+        code: 'INVALID_CURRENT_PASSWORD',
+      });
+    }
+
+    // Hash new password
+    const newPasswordHash = await hashPassword(newPassword);
+
+    // Update in DB & store
+    if (isDbConnected()) {
+      try {
+        await db('users').where('id', user.id).update({
+          password_hash: newPasswordHash,
+          updated_at: new Date(),
+        });
+      } catch (dbErr) {
+        logger.warn('DB password update error in changePassword:', dbErr.message);
+      }
+    }
+    updateUserInStore(user.id, { password_hash: newPasswordHash });
+
+    // Revoke previous sessions
+    revokeUserSession(user.id);
+
+    // Generate fresh tokens
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+
+    if (isDbConnected()) {
+      await db('users').where('id', user.id).update({
+        refresh_token: newRefreshToken,
+      }).catch(() => {});
+    }
+    updateUserInStore(user.id, { refresh_token: newRefreshToken });
+    setAuthCookies(res, { accessToken: newAccessToken, refreshToken: newRefreshToken });
+
+    // Audit log
+    await createAuditLog({
+      userId: user.id,
+      userRole: user.role,
+      action: 'password_change',
+      resourceType: 'user',
+      resourceId: user.id,
+      ipAddress: req.ip,
+      userAgent: req.get('user-agent'),
+    }).catch(() => {});
+
+    return res.json({
+      success: true,
+      message: 'Password changed successfully.',
+      tokens: {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      },
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (error) {
+    logger.error('Change password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to change password',
+      code: 'CHANGE_PASSWORD_ERROR',
+    });
+  }
+}
 

@@ -242,6 +242,7 @@ export default function AddBusWizard() {
   // Bus Brand / Chassis selection state
   const [selectedChassisId, setSelectedChassisId] = useState('tata_lpo_1618');
   const [chassisSearchQuery, setChassisSearchQuery] = useState('');
+  const [modelSearchFilter, setModelSearchFilter] = useState('');
   const [selectedBrandFilter, setSelectedBrandFilter] = useState('ALL');
 
   // Selected layout object
@@ -275,6 +276,16 @@ export default function AddBusWizard() {
         c.description?.toLowerCase().includes(q)
     );
   }, [compatibleChassisList, selectedBrandFilter, chassisSearchQuery]);
+
+  // Filtered models for Step 1 bus model selector
+  const availableModelsForSelectedMfr = useMemo(() => {
+    const list = getModelsForManufacturer(formData.manufacturer);
+    if (!modelSearchFilter.trim()) return list;
+    const q = modelSearchFilter.trim().toLowerCase();
+    return list.filter(
+      (c) => c.model.toLowerCase().includes(q) || c.fullName.toLowerCase().includes(q)
+    );
+  }, [formData.manufacturer, modelSearchFilter]);
 
   // Fare Configuration Engine State
   const [fareConfig, setFareConfig] = useState({
@@ -341,6 +352,7 @@ export default function AddBusWizard() {
 
   // Structured manufacturer change handler
   const handleManufacturerChange = (mfr) => {
+    setModelSearchFilter('');
     const models = getModelsForManufacturer(mfr);
     const firstModel = models.length > 0 ? models[0].model : '';
     const firstChassisId = models.length > 0 ? models[0].id : '';
@@ -822,22 +834,44 @@ export default function AddBusWizard() {
               <p className="text-[11px] text-[#6E5D73] mt-1">Select verified OEM coach builder / chassis brand</p>
             </div>
 
-            {/* Bus Model (Compulsory - Dependent on Manufacturer) */}
+            {/* Bus Model (Compulsory - Dependent on Manufacturer & Searchable) */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#6E5D73] mb-2">
-                Bus Model / Series <span className="text-rose-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#6E5D73]">
+                  Bus Model / Series <span className="text-rose-500">*</span>
+                </label>
+                {getModelsForManufacturer(formData.manufacturer).length > 1 && (
+                  <span className="text-[10px] text-[#6E5D73] font-semibold">
+                    {getModelsForManufacturer(formData.manufacturer).length} models available
+                  </span>
+                )}
+              </div>
+              <div className="relative mb-2">
+                <Search size={14} className="absolute left-3 top-2.5 text-[#6E5D73]" />
+                <input
+                  type="text"
+                  value={modelSearchFilter}
+                  onChange={(e) => setModelSearchFilter(e.target.value)}
+                  placeholder={`Search ${formData.manufacturer} models...`}
+                  className="w-full bg-white border border-[#E7A0BF]/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-[#24152D] focus:outline-none focus:ring-2 focus:ring-[#C13D78]"
+                />
+              </div>
               <div className="relative">
                 <select
                   value={formData.model}
                   onChange={(e) => handleModelChange(e.target.value)}
                   className="w-full bg-white border border-[#E7A0BF] rounded-xl px-4 py-2.5 text-sm font-bold text-[#24152D] focus:outline-none focus:ring-2 focus:ring-[#C13D78] appearance-none"
                 >
-                  {getModelsForManufacturer(formData.manufacturer).map((c) => (
+                  {availableModelsForSelectedMfr.map((c) => (
                     <option key={c.id} value={c.model}>
                       {c.model} &mdash; {c.fullName}
                     </option>
                   ))}
+                  {availableModelsForSelectedMfr.length === 0 && (
+                    <option value="" disabled>
+                      No models matching &ldquo;{modelSearchFilter}&rdquo;
+                    </option>
+                  )}
                 </select>
                 <Sliders size={16} className="absolute right-3 top-3 text-[#6E5D73] pointer-events-none" />
               </div>

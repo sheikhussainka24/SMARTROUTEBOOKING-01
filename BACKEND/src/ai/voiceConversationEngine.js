@@ -476,13 +476,13 @@ function buildNaturalResponse({
 
   if (parts.length === 0) {
     if (language === 'tamil') {
-      return 'புரிந்தது. உங்கள் பயண விவரங்களை கூறவும் அல்லது உங்கள் PNR எண்ணை பகிரவும்.';
+      return 'நிச்சயமாக! உங்கள் பயண தேதி மற்றும் ஏறும் இடத்தை குறிப்பிட்டால் உடனடி பேருந்துகளை கண்டறியலாம்.';
     } else if (language === 'hindi') {
-      return 'समझ गया। कृपया अपना PNR नंबर बताएं या बोर्डिंग, बस लोकेशन अथवा सीट के बारे में पूछें।';
+      return 'ज़रूर! अपनी यात्रा की तारीख, पिकअप और ड्राप लोकेशन बताएं, मैं बेस्ट बस सर्च करके दिखाती हूँ।';
     } else if (language === 'english') {
-      return 'Understood. Please provide your booking PNR number or ask about boarding, bus location, or seats.';
+      return 'Hello! Welcome to Smart Route. Would you like to reserve a bus seat, check PNR status, or explore routes?';
     } else {
-      return 'Purinjadhu. Unga booking PNR number solla mudiyuma? Boarding, bus location, or seat details pathi kekkalaam.';
+      return 'Kandippa paarkalaam! Unga travel date mattrum boarding point sonneenga-na udaney best bus search pannidalaam.';
     }
   }
 

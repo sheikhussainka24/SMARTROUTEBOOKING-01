@@ -3,15 +3,26 @@ import config from '../config/index.js';
 import db, { isDbConnected } from '../config/database.js';
 import logger from '../config/logger.js';
 import { findUserById } from '../services/dataStore.js';
+import { isSessionRevoked } from '../auth/tokenService.js';
+
+export { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../auth/tokenService.js';
 
 /**
  * Authentication Middleware
- * Verifies JWT access token and attaches user to request
+ * Verifies JWT access token (from Authorization header or secure cookie)
+ * and attaches user to request
  */
 export async function authenticate(req, res, next) {
   try {
+    let token = null;
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    } else if (req.cookies && (req.cookies.smartroute_token || req.cookies.token)) {
+      token = req.cookies.smartroute_token || req.cookies.token;
+    }
+
+    if (!token) {
       return res.status(401).json({
         success: false,
         error: 'Authentication required',
@@ -19,8 +30,16 @@ export async function authenticate(req, res, next) {
       });
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, config.jwt.accessSecret);
+
+    // Check if session was revoked (e.g. password reset, password change, explicit logout)
+    if (decoded.iat && isSessionRevoked(decoded.id, decoded.iat)) {
+      return res.status(401).json({
+        success: false,
+        error: 'Session has been revoked or expired. Please sign in again.',
+        code: 'SESSION_REVOKED',
+      });
+    }
 
     req.user = {
       id: decoded.id,
@@ -99,17 +118,25 @@ export async function authenticate(req, res, next) {
  */
 export function optionalAuth(req, res, next) {
   try {
+    let token = null;
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
+      token = authHeader.split(' ')[1];
+    } else if (req.cookies && (req.cookies.smartroute_token || req.cookies.token)) {
+      token = req.cookies.smartroute_token || req.cookies.token;
+    }
+
+    if (token) {
       const decoded = jwt.verify(token, config.jwt.accessSecret);
-      req.user = {
-        id: decoded.id,
-        email: decoded.email,
-        mobile: decoded.mobile,
-        role: decoded.role,
-        travelId: decoded.travelId,
-      };
+      if (!isSessionRevoked(decoded.id, decoded.iat)) {
+        req.user = {
+          id: decoded.id,
+          email: decoded.email,
+          mobile: decoded.mobile,
+          role: decoded.role,
+          travelId: decoded.travelId,
+        };
+      }
     }
   } catch (error) {
     // Silently continue without auth
@@ -231,44 +258,6 @@ export function tenantIsolation(req, res, next) {
   next();
 }
 
-/**
- * Generate JWT access token
- */
-export function generateAccessToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      mobile: user.mobile,
-      role: user.role,
-      status: user.status || 'active',
-      travelId: user.travel_id || null,
-    },
-    config.jwt.accessSecret,
-    { expiresIn: config.jwt.accessExpiry }
-  );
-}
-
-/**
- * Generate JWT refresh token
- */
-export function generateRefreshToken(user) {
-  const id = typeof user === 'object' && user !== null ? user.id : user;
-  return jwt.sign(
-    { id, type: 'refresh' },
-    config.jwt.refreshSecret,
-    { expiresIn: config.jwt.refreshExpiry }
-  );
-}
-
-/**
- * Verify JWT refresh token
- */
-export function verifyRefreshToken(token) {
-  return jwt.verify(token, config.jwt.refreshSecret);
-}
-
 // Aliases
 export const authorizeRole = authorize;
 export const authenticateOptional = optionalAuth;
-

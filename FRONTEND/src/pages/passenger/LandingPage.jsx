@@ -47,6 +47,72 @@ import featureCustomerSupport from '../../assets/feature-customer-support.jpg';
 import luxuryCoachHighway from '../../assets/luxury-coach-highway.jpg';
 import busCabinExperience from '../../assets/bus-cabin-experience.jpg';
 
+export const AMENITY_FEATURES = [
+  {
+    id: 'comfortable-seating',
+    title: 'Comfortable Seating',
+    description: '2+1 A/C executive sleeper berths and push-back recliner seats crafted for restful overnight highway journeys.',
+    localImg: '/assets/feature-comfortable-seating.jpg',
+    importedImg: featureComfortableSeating,
+    fallbackImg: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80',
+    alt: '2+1 luxury sleeper berths',
+  },
+  {
+    id: 'surveillance-cameras',
+    title: 'Surveillance Cameras',
+    description: 'High-definition CCTV cameras in passenger aisles and driver cockpits connected to our central security monitoring hub.',
+    localImg: '/assets/feature-surveillance-cameras.jpg',
+    importedImg: featureSurveillanceCameras,
+    fallbackImg: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80',
+    alt: 'High-definition CCTV cameras',
+  },
+  {
+    id: 'emergency-exits',
+    title: 'Emergency Exits',
+    description: 'Dual rear and roof emergency egress hatches with break-glass safety hammers clearly marked in every coach row.',
+    localImg: '/assets/feature-emergency-exits.jpg',
+    importedImg: featureEmergencyExits,
+    fallbackImg: 'https://images.unsplash.com/photo-1508873696983-2df5703bc20d?auto=format&fit=crop&w=600&q=80',
+    alt: 'Dual emergency exits and break-glass',
+  },
+  {
+    id: 'fire-extinguishers',
+    title: 'Fire Extinguishers',
+    description: 'Regularly serviced ABC dry powder extinguishers and engine bay thermal fire suppression sensors for maximum safety.',
+    localImg: '/assets/feature-fire-extinguishers.jpg',
+    importedImg: featureFireExtinguishers,
+    fallbackImg: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80',
+    alt: 'Serviced fire extinguisher and sensors',
+  },
+  {
+    id: 'online-payments',
+    title: 'Online Booking and Payments',
+    description: 'Instant live inventory access, zero surcharge payments through UPI, Cards, and Net Banking with instant receipt delivery.',
+    localImg: '/assets/feature-online-payments.jpg',
+    importedImg: featureOnlinePayments,
+    fallbackImg: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80',
+    alt: 'Instant UPI and online payments',
+  },
+  {
+    id: 'customer-support',
+    title: 'Customer Support',
+    description: 'Dedicated 24/7 passenger care helpline with multilingual representatives ready to assist on any schedule or route query.',
+    localImg: '/assets/feature-customer-support.jpg',
+    importedImg: featureCustomerSupport,
+    fallbackImg: 'https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80',
+    alt: 'Dedicated 24/7 passenger care helpline',
+  },
+];
+
+const AMENITY_ICON_CONFIG = {
+  'comfortable-seating': { icon: Armchair, bg: '#FDF2F8', color: '#DB2777' },
+  'surveillance-cameras': { icon: Video, bg: '#EFF6FF', color: '#2563EB' },
+  'emergency-exits': { icon: DoorOpen, bg: '#ECFDF5', color: '#059669' },
+  'fire-extinguishers': { icon: Flame, bg: '#FFF1F2', color: '#E11D48' },
+  'online-payments': { icon: CreditCard, bg: '#FDF2F8', color: '#C026D3' },
+  'customer-support': { icon: PhoneCall, bg: '#FFFBEB', color: '#D97706' },
+};
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -384,6 +450,10 @@ export default function LandingPage() {
                   src={busCutoutDay}
                   alt="SMART ROUTE Luxury Coach Rear"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80';
+                  }}
                 />
               </div>
 
@@ -400,6 +470,10 @@ export default function LandingPage() {
                   src={busCutoutDay}
                   alt="SMART ROUTE BOOKING Luxury Volvo 9600 Sleeper Coach with Metallic Gold and Black Livery"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80';
+                  }}
                 />
               </div>
             </div>
@@ -1351,6 +1425,10 @@ export default function LandingPage() {
               src={busCabinExperience}
               alt="Luxury Volvo & Tata Capella 2+1 A/C Sleeper Coach Cabin Berths"
               style={{ width: '100%', height: 320, objectFit: 'cover', display: 'block' }}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80';
+              }}
             />
             <div
               style={{
@@ -1407,245 +1485,58 @@ export default function LandingPage() {
 
         {/* 3x2 Grid of 6 Cards */}
         <div className="amenities-3x2-grid">
-          {/* Card 1: Comfortable Seating */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureComfortableSeating}
-                alt="2+1 luxury sleeper berths"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#FDF2F8',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#DB2777',
-                }}
-              >
-                <Armchair size={18} />
+          {AMENITY_FEATURES.map((feature) => {
+            const iconConfig = AMENITY_ICON_CONFIG[feature.id] || {
+              icon: Armchair,
+              bg: '#FDF2F8',
+              color: '#DB2777',
+            };
+            const IconComponent = iconConfig.icon;
+            return (
+              <div key={feature.id} className="amenity-feature-card">
+                <div className="amenity-thumb-wrapper">
+                  <img
+                    src={feature.importedImg || feature.localImg}
+                    alt={feature.alt}
+                    className="amenity-thumb-img"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = feature.fallbackImg;
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: 10,
+                      background: iconConfig.bg,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: iconConfig.color,
+                    }}
+                  >
+                    <IconComponent size={18} />
+                  </div>
+                  <h4
+                    className="font-display text-base font-bold text-[#1E1B4B]"
+                    style={{ margin: '4px 0 0 0' }}
+                  >
+                    {feature.title}
+                  </h4>
+                  <p
+                    className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
+                    style={{ margin: 0 }}
+                  >
+                    {feature.description}
+                  </p>
+                </div>
               </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Comfortable Seating
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                2+1 A/C executive sleeper berths and push-back recliner seats crafted for restful overnight highway journeys.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2: Surveillance Cameras */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureSurveillanceCameras}
-                alt="High-definition CCTV cameras"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#EFF6FF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#2563EB',
-                }}
-              >
-                <Video size={18} />
-              </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Surveillance Cameras
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                High-definition CCTV cameras in passenger aisles and driver cockpits connected to our central security monitoring hub.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3: Emergency Exits */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureEmergencyExits}
-                alt="Dual emergency exits and break-glass hammer"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#ECFDF5',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#059669',
-                }}
-              >
-                <DoorOpen size={18} />
-              </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Emergency Exits
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                Dual rear and roof emergency egress hatches with break-glass safety hammers clearly marked in every coach row.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 4: Fire Extinguishers */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureFireExtinguishers}
-                alt="Serviced fire extinguisher and sensors"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#FFF1F2',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#E11D48',
-                }}
-              >
-                <Flame size={18} />
-              </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Fire Extinguishers
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                Regularly serviced ABC dry powder extinguishers and engine bay thermal fire suppression sensors for maximum safety.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 5: Online Booking and Payments */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureOnlinePayments}
-                alt="Instant UPI and online payments"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#FDF2F8',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#C026D3',
-                }}
-              >
-                <CreditCard size={18} />
-              </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Online Booking and Payments
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                Instant live inventory access, zero surcharge payments through UPI, Cards, and Net Banking with instant receipt delivery.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 6: Customer Support */}
-          <div className="amenity-feature-card">
-            <div className="amenity-thumb-wrapper">
-              <img
-                src={featureCustomerSupport}
-                alt="Dedicated 24/7 passenger care helpline"
-                className="amenity-thumb-img"
-                loading="lazy"
-              />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: '#FFFBEB',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#D97706',
-                }}
-              >
-                <PhoneCall size={18} />
-              </div>
-              <h4
-                className="font-display text-base font-bold text-[#1E1B4B]"
-                style={{ margin: '4px 0 0 0' }}
-              >
-                Customer Support
-              </h4>
-              <p
-                className="font-sans text-xs md:text-sm text-[#64748B] leading-relaxed"
-                style={{ margin: 0 }}
-              >
-                Dedicated 24/7 passenger care helpline with multilingual representatives ready to assist on any schedule or route query.
-              </p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 
@@ -1656,7 +1547,7 @@ export default function LandingPage() {
           margin: '0 auto',
           width: '100%',
           borderRadius: 24,
-          background: `linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 48%, rgba(15, 23, 42, 0.45) 100%), url(${luxuryCoachHighway}) center center / cover no-repeat`,
+          background: `linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 48%, rgba(15, 23, 42, 0.45) 100%), url(${luxuryCoachHighway}), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80') center center / cover no-repeat`,
           color: '#FFFFFF',
           padding: '48px 44px',
           boxShadow: '0 20px 45px rgba(15, 23, 42, 0.22)',
@@ -1821,6 +1712,10 @@ export default function LandingPage() {
                   src={smartRouteLogo}
                   alt="SMART ROUTE BOOKING"
                   style={{ height: 26, objectFit: 'contain' }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/assets/smart-route-official-logo.jpg';
+                  }}
                 />
                 <div style={{ width: 18 }} />
               </div>
@@ -1847,6 +1742,10 @@ export default function LandingPage() {
                   src={busCutoutDay}
                   alt="Coach"
                   style={{ height: 30, width: 'auto', objectFit: 'contain' }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80';
+                  }}
                 />
               </div>
 

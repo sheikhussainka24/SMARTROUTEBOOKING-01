@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
  * - Sample Travel Owner + Travel
  * - Sample Manager, Staff, Driver
  * - Sample Bus with layout
- * - Sample Route (Coimbatore → Tenkasi)
+ * - Tamil Nadu Lead Route (Coimbatore → Tenkasi)
  * - Sample Trip
  */
 

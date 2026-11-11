@@ -1207,6 +1207,29 @@ export async function createCompanyBus(req, res) {
       status: status || 'published',
     });
 
+    if (isDbConnected()) {
+      try {
+        await db('buses').insert({
+          id: newBus.id,
+          travel_id: newBus.travel_id,
+          name: newBus.name,
+          registration_number: newBus.registration_number,
+          manufacturer: newBus.manufacturer,
+          model: newBus.model,
+          custom_name: newBus.custom_name,
+          display_name: newBus.display_name,
+          chassis_make: newBus.chassis_make,
+          chassis_model: newBus.chassis_model,
+          bus_type: 'ac_sleeper_2_1',
+          total_seats: newBus.total_seats,
+          status: newBus.status === 'published' ? 'active' : 'maintenance',
+          is_active: newBus.is_active,
+        });
+      } catch (dbErr) {
+        logger.warn('Failed to insert bus into PostgreSQL, fallback in-memory/JSON store retained:', dbErr.message);
+      }
+    }
+
     await createAuditLog({
       userId: req.user.id,
       userRole: req.user.role,

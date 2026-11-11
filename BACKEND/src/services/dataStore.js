@@ -3623,6 +3623,16 @@ export function registerUserData({ email, mobile, passwordHash, firstName, lastN
   return newUser;
 }
 
+export function updateUserInStore(id, updates) {
+  const user = users.find((u) => u.id === id);
+  if (user) {
+    Object.assign(user, updates, { updated_at: new Date().toISOString() });
+    savePersistentStore();
+    return user;
+  }
+  return null;
+}
+
 export function searchTripsData({ source, destination, date, busType, minFare, maxFare, includeSample = false }) {
   const srcLower = String(source || '').toLowerCase().trim();
   const dstLower = String(destination || '').toLowerCase().trim();
@@ -5163,7 +5173,7 @@ export function deleteBusInStore(busId, travelId) {
 /**
  * Cancel passenger booking in store (with seat release & refund creation)
  */
-export function cancelPassengerBooking(bookingIdOrPnr, userId, { reason, isPrivileged = false } = {}) {
+export function cancelPassengerBooking(bookingIdOrPnr, userId, { reason, isPrivileged = false, userEmail = null } = {}) {
   const cleanId = String(bookingIdOrPnr || '').trim().toUpperCase();
   const booking = bookings.find((b) =>
     b.id === bookingIdOrPnr ||
@@ -5179,7 +5189,8 @@ export function cancelPassengerBooking(bookingIdOrPnr, userId, { reason, isPrivi
   // Permission check
   const isOwner = userId && (
     booking.user_id === userId ||
-    booking.passenger_id === userId
+    booking.passenger_id === userId ||
+    (userEmail && booking.contact_email && booking.contact_email.toLowerCase() === userEmail.toLowerCase())
   );
   if (!isOwner && !isPrivileged) {
     const err = new Error('Unauthorized to cancel this booking');

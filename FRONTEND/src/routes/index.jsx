@@ -46,6 +46,8 @@ import PayrollPage from '../pages/accounting/PayrollPage.jsx';
 import PassengerRatingsPage from '../pages/accounting/PassengerRatingsPage.jsx';
 import ReportsPage from '../pages/accounting/ReportsPage.jsx';
 
+const ALL_AUTHENTICATED_ROLES = ['passenger', 'super_admin', 'travel_owner', 'manager', 'driver', 'staff'];
+
 /**
  * Route protection wrapper requiring authentication and authoritative role verification
  */
@@ -171,7 +173,7 @@ export default function AppRoutes() {
         <Route
           path="/passenger-details"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <TripBooking />
             </ProtectedRoute>
           }
@@ -179,7 +181,7 @@ export default function AppRoutes() {
         <Route
           path="/booking-success/:pnr"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <BookingSuccess />
             </ProtectedRoute>
           }
@@ -187,7 +189,7 @@ export default function AppRoutes() {
         <Route
           path="/ticket/:pnr"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <TicketConfirmation />
             </ProtectedRoute>
           }
@@ -195,7 +197,7 @@ export default function AppRoutes() {
         <Route
           path="/ticket-confirmation/:pnr"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <TicketConfirmation />
             </ProtectedRoute>
           }
@@ -203,7 +205,7 @@ export default function AppRoutes() {
         <Route
           path="/ticket-view/:pnr"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <TicketConfirmation />
             </ProtectedRoute>
           }
@@ -215,7 +217,7 @@ export default function AppRoutes() {
         <Route
           path="/my-bookings"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <MyBookings />
             </ProtectedRoute>
           }
@@ -223,7 +225,7 @@ export default function AppRoutes() {
         <Route
           path="/my-tickets"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <MyBookings />
             </ProtectedRoute>
           }
@@ -231,7 +233,7 @@ export default function AppRoutes() {
         <Route
           path="/transactions"
           element={
-            <ProtectedRoute allowedRoles={['passenger']}>
+            <ProtectedRoute allowedRoles={ALL_AUTHENTICATED_ROLES}>
               <TransactionsPage />
             </ProtectedRoute>
           }

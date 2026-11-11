@@ -12,12 +12,36 @@ import { testConnection, isDurableStorageRequired, isDbConnected, getDbDiagnosti
 import routes from './routes/index.js';
 import { initSocketServer } from './realtime/socketServer.js';
 import voiceScheduler from './services/voiceScheduler.js';
+import { parseCookies } from './middleware/cookieMiddleware.js';
+import { sanitizeRequest } from './middleware/sanitize.js';
 
 const app = express();
 const server = http.createServer(app);
 
 // 1. Security & Core Middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https:', 'http:'],
+        connectSrc: ["'self'", 'ws:', 'wss:', 'http:', 'https:'],
+        frameSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: config.env === 'production' ? [] : null,
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    hsts: config.env === 'production' ? { maxAge: 31536000, includeSubDomains: true, preload: true } : false,
+    xFrameOptions: { action: 'sameorigin' },
+    xContentTypeOptions: true,
+  })
+);
+
 app.use(
   cors({
     origin: config.clientUrl || '*',
@@ -26,9 +50,12 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+app.use(parseCookies);
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(sanitizeRequest);
 
 // Logging HTTP requests
 if (config.env !== 'test') {
@@ -100,7 +127,7 @@ app.use((req, res) => {
   });
 });
 
-// 6. Centralized Error Handler
+// 6. Centralized Error Handler (Prevents stack trace / database credential leaks in production)
 app.use((err, req, res, next) => {
   logger.error('Unhandled server error:', {
     message: err.message,
@@ -109,12 +136,19 @@ app.use((err, req, res, next) => {
     method: req.method,
   });
 
-  const statusCode = err.statusCode || 500;
+  const statusCode = err.statusCode || err.status || 500;
+  const isProd = config.env === 'production';
+
+  let safeMessage = err.message || 'Internal server error';
+  if (statusCode >= 500) {
+    safeMessage = isProd ? 'Internal server error' : (err.message || 'Internal server error');
+  }
+
   res.status(statusCode).json({
     success: false,
-    error: config.env === 'production' ? 'Internal server error' : err.message,
+    error: safeMessage,
     code: err.code || 'INTERNAL_ERROR',
-    ...(config.env !== 'production' && { stack: err.stack }),
+    ...(!isProd && statusCode >= 500 && { stack: err.stack }),
   });
 });
 

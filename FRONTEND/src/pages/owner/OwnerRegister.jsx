@@ -3,7 +3,10 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import api from '../../services/api.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import BrandLogo from '../../components/common/BrandLogo.jsx';
-import { Building2, Globe, FileText, Phone, Mail, User, Lock, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Building2, Globe, FileText, Phone, Mail, User, Lock, CheckCircle2, AlertCircle, ArrowLeft, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import PasswordStrengthMeter from '../../components/security/PasswordStrengthMeter.jsx';
+import { validatePassword } from '../../utils/inputValidators.js';
+import { getSafeErrorMessage } from '../../utils/securityUtils.js';
 
 export default function OwnerRegister() {
   const navigate = useNavigate();
@@ -35,6 +38,8 @@ export default function OwnerRegister() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successData, setSuccessData] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,8 +59,9 @@ export default function OwnerRegister() {
       setError('Please provide a valid 10-digit mobile number.');
       return;
     }
-    if (form.password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+    const pwdValidation = validatePassword(form.password);
+    if (!pwdValidation.valid) {
+      setError(pwdValidation.error || 'Password does not meet strong security requirements.');
       return;
     }
     if (form.password !== form.confirmPassword) {
@@ -105,7 +111,7 @@ export default function OwnerRegister() {
         setError(res.error || 'Failed to submit registration. Please verify your information.');
       }
     } catch (err) {
-      setError(err.message || 'An error occurred during registration. Please try again.');
+      setError(getSafeErrorMessage(err, 'register'));
     } finally {
       setLoading(false);
     }
@@ -423,37 +429,84 @@ export default function OwnerRegister() {
                     <label style={{ fontSize: 12, color: 'var(--sr-text-secondary)', marginBottom: 4, display: 'block', fontWeight: 600 }}>
                       Password (min 8 characters) *
                     </label>
-                    <input
-                      type="password"
-                      className="input-field"
-                      required
-                      placeholder="Secure operator password"
-                      value={form.password}
-                      onChange={(e) => setForm({ ...form, password: e.target.value })}
-                      autoComplete="new-password"
-                      data-lpignore="true"
-                      data-1p-ignore="true"
-                      data-form-type="other"
-                    />
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        className="input-field"
+                        required
+                        placeholder="Secure operator password"
+                        value={form.password}
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
+                        autoComplete="new-password"
+                        spellCheck="false"
+                        data-lpignore="true"
+                        data-1p-ignore="true"
+                        data-form-type="other"
+                        style={{ paddingRight: 36 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                          position: 'absolute',
+                          right: 10,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: '#6E5D73',
+                          padding: 2,
+                        }}
+                        aria-label="Toggle password visibility"
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <label style={{ fontSize: 12, color: 'var(--sr-text-secondary)', marginBottom: 4, display: 'block', fontWeight: 600 }}>
                       Confirm Password *
                     </label>
-                    <input
-                      type="password"
-                      className="input-field"
-                      required
-                      placeholder="Re-type password"
-                      value={form.confirmPassword}
-                      onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-                      autoComplete="new-password"
-                      data-lpignore="true"
-                      data-1p-ignore="true"
-                      data-form-type="other"
-                    />
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        className="input-field"
+                        required
+                        placeholder="Re-type password"
+                        value={form.confirmPassword}
+                        onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                        autoComplete="new-password"
+                        spellCheck="false"
+                        data-lpignore="true"
+                        data-1p-ignore="true"
+                        data-form-type="other"
+                        style={{ paddingRight: 36 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        style={{
+                          position: 'absolute',
+                          right: 10,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: '#6E5D73',
+                          padding: 2,
+                        }}
+                        aria-label="Toggle confirm password visibility"
+                      >
+                        {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
                   </div>
                 </div>
+
+                {/* Password Strength Meter & Policy Checklist */}
+                <PasswordStrengthMeter password={form.password} showChecklist={true} />
               </div>
             </div>
 

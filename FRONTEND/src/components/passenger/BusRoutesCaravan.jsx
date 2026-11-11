@@ -391,8 +391,8 @@ function RouteTrailerCard({
           overflow: 'hidden',
         }}
       >
-        {/* Master Route Highlight Ribbon */}
-        {route.isMaster && (
+        {/* Lead Route Highlight Ribbon */}
+        {(route.isLead || route.badge === 'TN Lead Corridor' || route.badgeText === 'TN Lead Corridor') && (
           <div
             style={{
               position: 'absolute',
@@ -422,7 +422,22 @@ function RouteTrailerCard({
             >
               {route.stateBadge}
             </span>
-            {route.popular && (
+            {(route.badge || route.badgeText) && (
+              <span
+                style={{
+                  fontSize: 9,
+                  fontWeight: 700,
+                  color: '#C13D78',
+                  background: '#FFF1F6',
+                  border: '1px solid #E7A0BF',
+                  padding: '1px 5px',
+                  borderRadius: 6,
+                }}
+              >
+                {route.badge || route.badgeText}
+              </span>
+            )}
+            {route.popular && !(route.badge || route.badgeText) && (
               <span
                 style={{
                   fontSize: 9,
@@ -573,12 +588,52 @@ export default function BusRoutesCaravan({ onSelectRoute }) {
     setCaravanKey((k) => k + 1);
   }, []);
 
+  // Dynamic Route Count Calculation based on actual operational routes length
+  const getRouteCount = (catId) => {
+    if (catId === 'all') return OPERATIONAL_CARAVAN_ROUTES.length;
+    return OPERATIONAL_CARAVAN_ROUTES.filter((r) => {
+      if (catId === 'tamilnadu' || catId === 'tn') {
+        return r.category === 'tamilnadu' || r.category === 'tn';
+      }
+      if (catId === 'karnataka' || catId === 'ka') {
+        return r.category === 'karnataka' || r.category === 'ka';
+      }
+      if (catId === 'kerala' || catId === 'kl') {
+        return r.category === 'kerala' || r.category === 'kl';
+      }
+      if (catId === 'andhra_telangana' || catId === 'ap_ts') {
+        return r.category === 'andhra_telangana' || r.category === 'ap_ts';
+      }
+      if (catId === 'pan_india' || catId === 'west') {
+        return r.category === 'pan_india' || r.category === 'west';
+      }
+      return r.category === catId;
+    }).length;
+  };
+
   // Filter routes based on category and search text
   const filteredRoutes = useMemo(() => {
     let list = OPERATIONAL_CARAVAN_ROUTES;
 
     if (selectedCategory !== 'all') {
-      list = list.filter((r) => r.category === selectedCategory);
+      list = list.filter((r) => {
+        if (selectedCategory === 'tamilnadu' || selectedCategory === 'tn') {
+          return r.category === 'tamilnadu' || r.category === 'tn';
+        }
+        if (selectedCategory === 'karnataka' || selectedCategory === 'ka') {
+          return r.category === 'karnataka' || r.category === 'ka';
+        }
+        if (selectedCategory === 'kerala' || selectedCategory === 'kl') {
+          return r.category === 'kerala' || r.category === 'kl';
+        }
+        if (selectedCategory === 'andhra_telangana' || selectedCategory === 'ap_ts') {
+          return r.category === 'andhra_telangana' || r.category === 'ap_ts';
+        }
+        if (selectedCategory === 'pan_india' || selectedCategory === 'west') {
+          return r.category === 'pan_india' || r.category === 'west';
+        }
+        return r.category === selectedCategory;
+      });
     }
 
     if (searchFilter.trim()) {
@@ -589,6 +644,18 @@ export default function BusRoutesCaravan({ onSelectRoute }) {
           r.to.toLowerCase().includes(q) ||
           (r.region && r.region.toLowerCase().includes(q))
       );
+    }
+
+    // Carousel First Card Preference:
+    // When "Tamil Nadu" tab is active/selected, ensure Coimbatore ⇄ Tenkasi is index 0 (lead card)
+    if (selectedCategory === 'tamilnadu' || selectedCategory === 'tn' || selectedCategory === 'all') {
+      const leadIndex = list.findIndex(
+        (r) => (r.from === 'Coimbatore' && r.to === 'Tenkasi') || r.id === 'route_cbe_tks'
+      );
+      if (leadIndex > 0) {
+        const leadRoute = list[leadIndex];
+        list = [leadRoute, ...list.slice(0, leadIndex), ...list.slice(leadIndex + 1)];
+      }
     }
 
     return list;
@@ -637,7 +704,7 @@ export default function BusRoutesCaravan({ onSelectRoute }) {
         >
           <LeadCoachUnit
             badgeText={`${catLabel.toUpperCase()} LEAD COACH`}
-            isMaster={category === 'master'}
+            isMaster={false}
           />
           <TrailerCoupler />
           {routes.map((route, idx) => (
@@ -658,29 +725,29 @@ export default function BusRoutesCaravan({ onSelectRoute }) {
     // All routes: organize into 5 regional squadrons, each preceded by its official Lead Coach:
     const squadrons = [
       {
-        badge: 'FLAGSHIP LEAD COACH',
-        isMaster: true,
-        routes: routes.filter((r) => r.category === 'master' || r.category === 'tn'),
+        badge: 'TAMIL NADU LEAD COACH',
+        isMaster: false,
+        routes: routes.filter((r) => r.category === 'tamilnadu' || r.category === 'tn'),
       },
       {
         badge: 'INTERSTATE LEAD COACH',
         isMaster: false,
-        routes: routes.filter((r) => r.category === 'ka'),
+        routes: routes.filter((r) => r.category === 'karnataka' || r.category === 'ka'),
       },
       {
         badge: 'MALABAR LEAD COACH',
         isMaster: false,
-        routes: routes.filter((r) => r.category === 'kl'),
+        routes: routes.filter((r) => r.category === 'kerala' || r.category === 'kl'),
       },
       {
         badge: 'DECCAN LEAD COACH',
         isMaster: false,
-        routes: routes.filter((r) => r.category === 'ap_ts'),
+        routes: routes.filter((r) => r.category === 'andhra_telangana' || r.category === 'ap_ts'),
       },
       {
         badge: 'PAN-INDIA LEAD COACH',
         isMaster: false,
-        routes: routes.filter((r) => r.category === 'west'),
+        routes: routes.filter((r) => r.category === 'pan_india' || r.category === 'west'),
       },
     ].filter((s) => s.routes.length > 0);
 
@@ -836,7 +903,7 @@ export default function BusRoutesCaravan({ onSelectRoute }) {
                     fontWeight: 800,
                   }}
                 >
-                  {cat.count}
+                  {getRouteCount(cat.id)}
                 </span>
               </button>
             );

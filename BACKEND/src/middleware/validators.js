@@ -89,6 +89,60 @@ export const otpVerifyValidator = [
   handleValidation,
 ];
 
+export const forgotPasswordValidator = [
+  body().custom((body) => {
+    const id = body.identifier || body.email || body.mobile;
+    if (!id || !String(id).trim()) {
+      throw new Error('Email or mobile number is required');
+    }
+    return true;
+  }),
+  handleValidation,
+];
+
+export const resetPasswordValidator = [
+  body().custom((body) => {
+    const id = body.identifier || body.email || body.mobile;
+    if (!id || !String(id).trim()) {
+      throw new Error('Email or mobile number is required');
+    }
+    return true;
+  }),
+  body('otp').trim().isLength({ min: 6, max: 6 }).isNumeric().withMessage('OTP must be 6 digits'),
+  body('newPassword')
+    .isLength({ min: 8, max: 128 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_~`\-+=\[\]\\\/])/)
+    .withMessage('Password must contain uppercase, lowercase, number, and special character'),
+  body('confirmPassword')
+    .optional()
+    .custom((val, { req }) => {
+      if (val && val !== req.body.newPassword) {
+        throw new Error('Passwords do not match. Please verify both password fields.');
+      }
+      return true;
+    }),
+  handleValidation,
+];
+
+export const changePasswordValidator = [
+  body('currentPassword').notEmpty().withMessage('Current password is required'),
+  body('newPassword')
+    .isLength({ min: 8, max: 128 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_~`\-+=\[\]\\\/])/)
+    .withMessage('Password must contain uppercase, lowercase, number, and special character'),
+  body('confirmPassword')
+    .optional()
+    .custom((val, { req }) => {
+      if (val && val !== req.body.newPassword) {
+        throw new Error('Passwords do not match. Please verify both password fields.');
+      }
+      return true;
+    }),
+  handleValidation,
+];
+
 // ======================== TRAVEL VALIDATORS ========================
 export const travelRegistrationValidator = [
   body('name').trim().isLength({ min: 2, max: 255 }).withMessage('Travel name required'),
@@ -165,5 +219,8 @@ export const validateRegister = registerValidator;
 export const validateLogin = loginValidator;
 export const validateOtpRequest = otpRequestValidator;
 export const validateOtpVerify = otpVerifyValidator;
+export const validateForgotPassword = forgotPasswordValidator;
+export const validateResetPassword = resetPasswordValidator;
+export const validateChangePassword = changePasswordValidator;
 export const handleValidationErrors = handleValidation;
 

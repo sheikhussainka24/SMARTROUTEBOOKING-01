@@ -5,7 +5,7 @@
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-02",
+      "expense_date": "2026-11-09",
       "category": "diesel_fuel",
       "amount": 11100,
       "quantity": 120,
@@ -17,16 +17,16 @@
       "created_by": "usr-driver-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-02T10:08:18.775Z",
+      "approved_at": "2026-11-09T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-fuel-2",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "diesel_fuel",
       "amount": 10637.5,
       "quantity": 115,
@@ -38,16 +38,16 @@
       "created_by": "usr-driver-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-toll-1",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "toll",
       "amount": 1850,
       "vendor": "FASTag NHAI Toll Plazas",
@@ -57,16 +57,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-parking-1",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "parking",
       "amount": 450,
       "vendor": "Omni Terminal Parking Hub",
@@ -76,16 +76,16 @@
       "created_by": "usr-driver-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-drv-allowance",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "driver_allowance",
       "amount": 1200,
       "vendor": "Driver Batty / Allowance",
@@ -95,16 +95,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-cln-allowance",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "cleaner_allowance",
       "amount": 600,
       "vendor": "Cleaner Batty",
@@ -114,16 +114,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-sr-001-maint-1",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": null,
-      "expense_date": "2026-11-02",
+      "expense_date": "2026-11-09",
       "category": "maintenance",
       "amount": 4800,
       "vendor": "Tata Commercial Service Centre, Coimbatore",
@@ -133,16 +133,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-02T10:08:18.775Z",
+      "approved_at": "2026-11-09T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "exp-sr-drv-monthly-salary",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": null,
-      "expense_date": "2026-11-04",
+      "expense_date": "2026-11-11",
       "category": "driver_salary",
       "amount": 32000,
       "vendor": "K. Murugan (Commercial Pilot)",
@@ -152,16 +152,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-04T10:08:18.775Z",
+      "approved_at": "2026-11-11T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-04T10:08:18.775Z"
+      "created_at": "2026-11-11T08:40:07.217Z"
     },
     {
       "id": "exp-sr-drv-trip-alloc-1",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "driver_salary",
       "amount": 1066.67,
       "vendor": "Driver Salary Trip Allocation",
@@ -171,16 +171,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": true,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-loss-bus-maint",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-exec-seatersleeper-02",
       "trip_id": null,
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "maintenance",
       "amount": 45000,
       "vendor": "Ashok Leyland Authorised Workshop",
@@ -190,16 +190,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-loss-bus-fuel",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-exec-seatersleeper-02",
       "trip_id": null,
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "diesel_fuel",
       "amount": 14000,
       "vendor": "HPCL Fuel Station",
@@ -209,16 +209,16 @@
       "created_by": "usr-owner-001",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-vv-001-fuel",
       "travel_id": "trv-veevee-002",
       "bus_id": "bus-cbe-tks-vv-02",
       "trip_id": "trp-vv-tks-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "diesel_fuel",
       "amount": 10208,
       "quantity": 110,
@@ -230,16 +230,16 @@
       "created_by": "usr-driver-002",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-vv-001-toll",
       "travel_id": "trv-veevee-002",
       "bus_id": "bus-cbe-tks-vv-02",
       "trip_id": "trp-vv-tks-100",
-      "expense_date": "2026-11-03",
+      "expense_date": "2026-11-10",
       "category": "toll",
       "amount": 1950,
       "vendor": "NHAI FASTag",
@@ -249,9 +249,9 @@
       "created_by": "usr-driver-002",
       "approval_status": "approved",
       "approved_by": "usr-owner-001",
-      "approved_at": "2026-11-03T10:08:18.775Z",
+      "approved_at": "2026-11-10T08:40:07.217Z",
       "is_salary_allocation": false,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "exp-bdf85f13",
@@ -551,6 +551,29 @@
       "is_salary_allocation": false,
       "created_at": "2026-11-04T10:08:18.804Z",
       "updated_at": "2026-11-04T10:08:18.804Z"
+    },
+    {
+      "id": "exp-edea922d",
+      "travel_id": "trv-smartroute-001",
+      "bus_id": "bus-sr-001",
+      "trip_id": null,
+      "expense_date": "2026-10-25",
+      "category": "other",
+      "amount": 1759,
+      "quantity": null,
+      "unit_price": null,
+      "vendor": "Stationery & Boarding Slips #7259",
+      "payment_method": "bank_transfer",
+      "payment_status": "paid",
+      "notes": " [Reversed by Admin: Entered duplicate vendor slip by mistake]",
+      "receipt_url": null,
+      "created_by": "usr-owner-001",
+      "approval_status": "reversed",
+      "approved_by": "usr-owner-001",
+      "approved_at": "2026-11-11T08:40:07.259Z",
+      "is_salary_allocation": false,
+      "created_at": "2026-11-11T08:40:07.259Z",
+      "updated_at": "2026-11-11T08:40:07.259Z"
     }
   ],
   "fuelRecords": [
@@ -559,7 +582,7 @@
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "purchase_date": "2026-11-02",
+      "purchase_date": "2026-11-09",
       "litres": 120,
       "price_per_litre": 92.5,
       "total_cost": 11100,
@@ -571,14 +594,14 @@
       "created_by": "usr-driver-001",
       "is_flagged_anomaly": false,
       "anomaly_reason": null,
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "fuel-sr-001-2",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-sr-001",
       "trip_id": "trp-sr-cbe-100",
-      "purchase_date": "2026-11-03",
+      "purchase_date": "2026-11-10",
       "litres": 115,
       "price_per_litre": 92.5,
       "total_cost": 10637.5,
@@ -590,14 +613,14 @@
       "created_by": "usr-driver-001",
       "is_flagged_anomaly": false,
       "anomaly_reason": null,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "fuel-sr-anomaly-01",
       "travel_id": "trv-smartroute-001",
       "bus_id": "bus-royal-sleeper-01",
       "trip_id": null,
-      "purchase_date": "2026-11-04",
+      "purchase_date": "2026-11-11",
       "litres": 130,
       "price_per_litre": 93,
       "total_cost": 12090,
@@ -608,14 +631,14 @@
       "created_by": "usr-driver-001",
       "is_flagged_anomaly": true,
       "anomaly_reason": "Odometer decreased from previous recorded reading of 110,000 km to 98,000 km.",
-      "created_at": "2026-11-04T10:08:18.775Z"
+      "created_at": "2026-11-11T08:40:07.217Z"
     },
     {
       "id": "fuel-vv-001-1",
       "travel_id": "trv-veevee-002",
       "bus_id": "bus-cbe-tks-vv-02",
       "trip_id": "trp-vv-tks-100",
-      "purchase_date": "2026-11-03",
+      "purchase_date": "2026-11-10",
       "litres": 110,
       "price_per_litre": 92.8,
       "total_cost": 10208,
@@ -625,7 +648,7 @@
       "created_by": "usr-driver-002",
       "is_flagged_anomaly": false,
       "anomaly_reason": null,
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     }
   ],
   "staffPayroll": [
@@ -642,12 +665,12 @@
       "amount_payable": 32000,
       "amount_paid": 32000,
       "balance": 0,
-      "payment_date": "2026-11-04",
+      "payment_date": "2026-11-11",
       "payment_method": "bank_transfer",
       "payment_status": "paid",
       "notes": "Regular monthly salary credited",
       "created_by": "usr-owner-001",
-      "created_at": "2026-11-04T10:08:18.775Z"
+      "created_at": "2026-11-11T08:40:07.217Z"
     },
     {
       "id": "pay-sr-cln-001",
@@ -662,12 +685,12 @@
       "amount_payable": 18000,
       "amount_paid": 18000,
       "balance": 0,
-      "payment_date": "2026-11-04",
+      "payment_date": "2026-11-11",
       "payment_method": "bank_transfer",
       "payment_status": "paid",
       "notes": "Cleaner monthly salary credited",
       "created_by": "usr-owner-001",
-      "created_at": "2026-11-04T10:08:18.775Z"
+      "created_at": "2026-11-11T08:40:07.217Z"
     },
     {
       "id": "pay-vv-drv-002",
@@ -682,12 +705,12 @@
       "amount_payable": 30000,
       "amount_paid": 25000,
       "balance": 5000,
-      "payment_date": "2026-11-03",
+      "payment_date": "2026-11-10",
       "payment_method": "bank_transfer",
       "payment_status": "partial",
       "notes": "Partial advance credited, balance ₹5,000 pending",
       "created_by": "usr-owner-001",
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     }
   ],
   "passengerReviews": [
@@ -710,7 +733,7 @@
       "moderation_status": "published",
       "moderated_by": "usr-admin-001",
       "moderation_notes": "Verified trip passenger review",
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "rev-sr-seed-2",
@@ -731,7 +754,7 @@
       "moderation_status": "published",
       "moderated_by": "usr-admin-001",
       "moderation_notes": "Verified trip passenger review",
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "rev-vv-8820-1",
@@ -752,7 +775,7 @@
       "moderation_status": "published",
       "moderated_by": "usr-admin-001",
       "moderation_notes": "Verified trip passenger review",
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "rev-loss-exec-01",
@@ -773,7 +796,7 @@
       "moderation_status": "flagged",
       "moderated_by": null,
       "moderation_notes": "Under review for operator response",
-      "created_at": "2026-11-03T10:08:18.775Z"
+      "created_at": "2026-11-10T08:40:07.217Z"
     },
     {
       "id": "rev-0b47c671",
@@ -1068,6 +1091,27 @@
       "moderated_by": null,
       "moderation_notes": "Automatically published verified booking review",
       "created_at": "2026-11-04T10:08:18.800Z"
+    },
+    {
+      "id": "rev-602a597f",
+      "booking_id": "bkg-verify-test-1794386407255",
+      "pnr_number": "PNR-REV-7255",
+      "user_id": "usr-passenger-001",
+      "passenger_name": "Test Passenger",
+      "travel_id": "trv-smartroute-001",
+      "bus_id": "bus-sr-001",
+      "trip_id": "trp-sr-cbe-100",
+      "overall_rating": 5,
+      "cleanliness_rating": 5,
+      "seat_comfort_rating": 5,
+      "punctuality_rating": 4,
+      "staff_behaviour_rating": 5,
+      "review_text": "Great experience on this test ride!",
+      "complaint_category": "none",
+      "moderation_status": "published",
+      "moderated_by": null,
+      "moderation_notes": "Automatically published verified booking review",
+      "created_at": "2026-11-11T08:40:07.255Z"
     }
   ],
   "expenseAuditLogs": [
@@ -1083,7 +1127,7 @@
       },
       "performed_by": "usr-driver-001",
       "reason": "Standard fuel refuel entry",
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "aud-exp-002",
@@ -1097,7 +1141,7 @@
       },
       "performed_by": "usr-owner-001",
       "reason": "Verified against fuel slip #IOCL-8829",
-      "created_at": "2026-11-02T10:08:18.775Z"
+      "created_at": "2026-11-09T08:40:07.217Z"
     },
     {
       "id": "aud-d175aaeb",
@@ -2190,6 +2234,90 @@
       "performed_by": "usr-owner-001",
       "reason": "Entered duplicate vendor slip by mistake",
       "created_at": "2026-11-04T10:08:18.804Z"
+    },
+    {
+      "id": "aud-3c9ff722",
+      "expense_id": "exp-edea922d",
+      "action": "created",
+      "previous_data": null,
+      "new_data": {
+        "id": "exp-edea922d",
+        "travel_id": "trv-smartroute-001",
+        "bus_id": "bus-sr-001",
+        "trip_id": null,
+        "expense_date": "2026-10-25",
+        "category": "other",
+        "amount": 1759,
+        "quantity": null,
+        "unit_price": null,
+        "vendor": "Stationery & Boarding Slips #7259",
+        "payment_method": "bank_transfer",
+        "payment_status": "paid",
+        "notes": "",
+        "receipt_url": null,
+        "created_by": "usr-owner-001",
+        "approval_status": "approved",
+        "approved_by": "usr-owner-001",
+        "approved_at": "2026-11-11T08:40:07.259Z",
+        "is_salary_allocation": false,
+        "created_at": "2026-11-11T08:40:07.259Z"
+      },
+      "performed_by": "usr-owner-001",
+      "reason": "Initial expense entry submitted",
+      "created_at": "2026-11-11T08:40:07.259Z"
+    },
+    {
+      "id": "aud-291b65e1",
+      "expense_id": "exp-edea922d",
+      "action": "reverse",
+      "previous_data": {
+        "id": "exp-edea922d",
+        "travel_id": "trv-smartroute-001",
+        "bus_id": "bus-sr-001",
+        "trip_id": null,
+        "expense_date": "2026-10-25",
+        "category": "other",
+        "amount": 1759,
+        "quantity": null,
+        "unit_price": null,
+        "vendor": "Stationery & Boarding Slips #7259",
+        "payment_method": "bank_transfer",
+        "payment_status": "paid",
+        "notes": "",
+        "receipt_url": null,
+        "created_by": "usr-owner-001",
+        "approval_status": "approved",
+        "approved_by": "usr-owner-001",
+        "approved_at": "2026-11-11T08:40:07.259Z",
+        "is_salary_allocation": false,
+        "created_at": "2026-11-11T08:40:07.259Z"
+      },
+      "new_data": {
+        "id": "exp-edea922d",
+        "travel_id": "trv-smartroute-001",
+        "bus_id": "bus-sr-001",
+        "trip_id": null,
+        "expense_date": "2026-10-25",
+        "category": "other",
+        "amount": 1759,
+        "quantity": null,
+        "unit_price": null,
+        "vendor": "Stationery & Boarding Slips #7259",
+        "payment_method": "bank_transfer",
+        "payment_status": "paid",
+        "notes": " [Reversed by Admin: Entered duplicate vendor slip by mistake]",
+        "receipt_url": null,
+        "created_by": "usr-owner-001",
+        "approval_status": "reversed",
+        "approved_by": "usr-owner-001",
+        "approved_at": "2026-11-11T08:40:07.259Z",
+        "is_salary_allocation": false,
+        "created_at": "2026-11-11T08:40:07.259Z",
+        "updated_at": "2026-11-11T08:40:07.259Z"
+      },
+      "performed_by": "usr-owner-001",
+      "reason": "Entered duplicate vendor slip by mistake",
+      "created_at": "2026-11-11T08:40:07.259Z"
     }
   ]
 }

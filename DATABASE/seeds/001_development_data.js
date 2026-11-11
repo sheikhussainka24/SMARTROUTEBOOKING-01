@@ -482,7 +482,7 @@ export async function seed(knex) {
 
   // ======================== 5. CORRIDOR ROUTES & STOPS ========================
   const routeDefinitions = [
-    // 1. Master Route: Coimbatore ⇄ Tenkasi
+    // 1. Tamil Nadu Lead Corridor: Coimbatore ⇄ Tenkasi
     { id: uuidv4(), code: 'CBE-TKS-101', name: 'Coimbatore - Tenkasi Express', source: 'Coimbatore', destination: 'Tenkasi', distance_km: 320, duration: 450, direction: 'forward' },
     { id: uuidv4(), code: 'TKS-CBE-102', name: 'Tenkasi - Coimbatore Express', source: 'Tenkasi', destination: 'Coimbatore', distance_km: 320, duration: 450, direction: 'reverse' },
     // 2. Master Route: Coimbatore ⇄ Karaikudi

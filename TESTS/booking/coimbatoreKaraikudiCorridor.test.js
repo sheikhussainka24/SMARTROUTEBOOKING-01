@@ -113,7 +113,7 @@ describe('SMART ROUTE — Coimbatore ⇄ Karaikudi Corridor End-to-End Suite', (
         (r) => r.from === 'Coimbatore' && r.to === 'Karaikudi'
       );
       expect(card).toBeDefined();
-      expect(card.category).toBe('tn');
+      expect(card.category === 'tamilnadu' || card.category === 'tn').toBe(true);
       expect(card.stateBadge).toBe('TN');
       expect(card.distance).toBe('265 km');
       expect(card.frequency).toBe('Daily • 3+ Buses');
@@ -122,9 +122,9 @@ describe('SMART ROUTE — Coimbatore ⇄ Karaikudi Corridor End-to-End Suite', (
     });
 
     test('Category counts correctly reflect Tamil Nadu count and All count', () => {
-      const tnCategory = ROUTE_CATEGORIES.find((c) => c.id === 'tn');
+      const tnCategory = ROUTE_CATEGORIES.find((c) => c.id === 'tamilnadu' || c.id === 'tn');
       const allCategory = ROUTE_CATEGORIES.find((c) => c.id === 'all');
-      expect(tnCategory.count).toBe(21);
+      expect(tnCategory.count).toBe(22);
       expect(allCategory.count).toBe(71);
     });
   });

@@ -6,6 +6,9 @@ import {
   resendLoginOtp,
   verifyEmail,
   resendEmailVerification,
+  forgotPassword,
+  resetPassword,
+  changePassword,
   driverLogin,
   ownerLogin,
   managerLogin,
@@ -23,6 +26,9 @@ import {
   validateLogin,
   validateOtpRequest,
   validateOtpVerify,
+  validateForgotPassword,
+  validateResetPassword,
+  validateChangePassword,
 } from '../middleware/validators.js';
 
 const router = Router();
@@ -34,6 +40,11 @@ router.post('/login/verify-otp', verifyLoginOtp);
 router.post('/login/resend-otp', resendLoginOtp);
 router.post('/verify-email', verifyEmail);
 router.post('/resend-verification', resendEmailVerification);
+
+// Password recovery and update endpoints
+router.post('/forgot-password', validateForgotPassword, forgotPassword);
+router.post('/reset-password', validateResetPassword, resetPassword);
+router.post('/change-password', authenticate, validateChangePassword, changePassword);
 router.get('/invitation/validate', (req, res) => {
   const { token, email, mobile } = req.query;
   const { validateManagerInvitation } = require ? null : {};

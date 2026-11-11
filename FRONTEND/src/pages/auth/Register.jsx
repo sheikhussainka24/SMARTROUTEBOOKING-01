@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api.js';
 import BrandLogo from '../../components/common/BrandLogo.jsx';
+import PasswordStrengthMeter from '../../components/security/PasswordStrengthMeter.jsx';
+import { getSafeErrorMessage } from '../../utils/securityUtils.js';
 import {
   User,
   Phone,
@@ -180,7 +182,7 @@ export default function Register() {
         setError(res.error || 'Registration failed. Please check inputs.');
       }
     } catch (err) {
-      setError(err.message || 'Registration failed. Please check inputs.');
+      setError(getSafeErrorMessage(err, 'register'));
     } finally {
       setLoading(false);
     }
@@ -906,23 +908,8 @@ export default function Register() {
                     </button>
                   </div>
 
-                  {/* Password strength checklist */}
-                  {form.password && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginTop: 6, fontSize: 11 }}>
-                      <span style={{ color: passwordCriteria.length ? '#059669' : '#94A3B8' }}>
-                        {passwordCriteria.length ? '✓' : '•'} 8+ characters
-                      </span>
-                      <span style={{ color: passwordCriteria.upper ? '#059669' : '#94A3B8' }}>
-                        {passwordCriteria.upper ? '✓' : '•'} Uppercase letter
-                      </span>
-                      <span style={{ color: passwordCriteria.lower ? '#059669' : '#94A3B8' }}>
-                        {passwordCriteria.lower ? '✓' : '•'} Lowercase letter
-                      </span>
-                      <span style={{ color: passwordCriteria.digit && passwordCriteria.special ? '#059669' : '#94A3B8' }}>
-                        {passwordCriteria.digit && passwordCriteria.special ? '✓' : '•'} Number &amp; Symbol
-                      </span>
-                    </div>
-                  )}
+                  {/* Real-time Password Strength & Compliance Meter */}
+                  <PasswordStrengthMeter password={form.password} showChecklist={true} />
                 </div>
 
                 {/* Confirm Password */}

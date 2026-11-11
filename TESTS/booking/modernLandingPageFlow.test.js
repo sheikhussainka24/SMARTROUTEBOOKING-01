@@ -119,6 +119,12 @@ describe('SMART ROUTE — Modern Landing Page & Search Flow Specifications', () 
     expect(landingPageContent).not.toMatch(/Our\s+Gallery/i);
   });
 
+  test('Amenity features array defines resilient CDN fallback images with onError handlers', () => {
+    expect(landingPageContent).toContain('AMENITY_FEATURES');
+    expect(landingPageContent).toContain('images.unsplash.com');
+    expect(landingPageContent).toContain('e.currentTarget.src = feature.fallbackImg');
+  });
+
   // ==================== SECTION 10: DARK FOOTER ====================
   test('Dark Footer has deep dark background, wavy top divider border, and official contact phone and email', () => {
     expect(footerContent).toContain('#0F172A');

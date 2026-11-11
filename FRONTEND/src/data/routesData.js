@@ -1,31 +1,37 @@
 /**
  * SMART ROUTE — Comprehensive Operational Intercity Bus Route Catalogue
- * 70 Long-Distance Private Coach Routes structured for the Bus Trailer Caravan:
- * 1. Master Sample Route (Coimbatore ⇄ Tenkasi)
- * 2. Tamil Nadu & Intra-State Routes (20)
- * 3. Karnataka & Inter-State Routes (20)
- * 4. Kerala Connections (13)
- * 5. Andhra Pradesh & Telangana Routes (9)
- * 6. West & Pan-India Routes (7)
+ * 71 Long-Distance Private Coach Routes structured for the Bus Trailer Caravan:
+ * 1. Tamil Nadu & Intra-State Routes (22) — Led by Coimbatore ⇄ Tenkasi
+ * 2. Karnataka & Inter-State Routes (20)
+ * 3. Kerala Connections (13)
+ * 4. Andhra Pradesh & Telangana Routes (9)
+ * 5. West & Pan-India Routes (7)
  */
 
 export const ROUTE_CATEGORIES = [
   { id: 'all', label: 'All Routes', count: 71 },
-  { id: 'master', label: 'Master Route', count: 1 },
-  { id: 'tn', label: 'Tamil Nadu', count: 21 },
-  { id: 'ka', label: 'Karnataka', count: 20 },
-  { id: 'kl', label: 'Kerala', count: 13 },
-  { id: 'ap_ts', label: 'Andhra & Telangana', count: 9 },
-  { id: 'west', label: 'West & Pan-India', count: 7 },
+  { id: 'tamilnadu', label: 'Tamil Nadu', count: 22 },
+  { id: 'karnataka', label: 'Karnataka', count: 20 },
+  { id: 'kerala', label: 'Kerala', count: 13 },
+  { id: 'andhra_telangana', label: 'Andhra & Telangana', count: 9 },
+  { id: 'pan_india', label: 'West & Pan-India', count: 7 },
 ];
+
+export const getRouteCount = (catId) => {
+  if (catId === 'all') return OPERATIONAL_CARAVAN_ROUTES.length;
+  return OPERATIONAL_CARAVAN_ROUTES.filter(
+    (r) => r.category === catId || (catId === 'tamilnadu' && (r.category === 'tn' || r.category === 'tamilnadu'))
+  ).length;
+};
 
 export const OPERATIONAL_CARAVAN_ROUTES = [
   // ============================================================================
-  // 1. MASTER SAMPLE ROUTE
+  // 1. TAMIL NADU & INTRA-STATE ROUTES (22) — LEAD CORRIDOR AT INDEX 0
   // ============================================================================
   {
-    id: 'route-master-cbe-tks',
-    category: 'master',
+    id: 'route_cbe_tks',
+    legacyId: 'route-master-cbe-tks',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Tenkasi',
     searchFrom: 'Coimbatore',
@@ -35,18 +41,16 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
     stateBadge: 'TN',
     distance: '320 km',
     duration: '8h',
-    badgeText: 'Master Flagship',
+    badge: 'TN Lead Corridor',
+    badgeText: 'TN Lead Corridor',
     frequency: 'Daily Sleeper Express',
     popular: true,
-    isMaster: true,
+    isMaster: false,
+    isLead: true,
   },
-
-  // ============================================================================
-  // 2. TAMIL NADU & INTRA-STATE ROUTES (21)
-  // ============================================================================
   {
     id: 'route-tn-cbe-kkdi',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Karaikudi',
     searchFrom: 'Coimbatore',
@@ -62,7 +66,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-01',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Coimbatore',
     searchFrom: 'Chennai',
@@ -78,7 +82,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-02',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Madurai',
     searchFrom: 'Chennai',
@@ -94,7 +98,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-03',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Tirunelveli',
     searchFrom: 'Chennai',
@@ -109,7 +113,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-04',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Tenkasi',
     searchFrom: 'Chennai',
@@ -125,7 +129,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-05',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Tiruchendur',
     searchFrom: 'Chennai',
@@ -140,7 +144,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-06',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Nagercoil',
     searchFrom: 'Chennai',
@@ -156,7 +160,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-07',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Thoothukudi',
     searchFrom: 'Chennai',
@@ -171,7 +175,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-08',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Rameswaram',
     searchFrom: 'Chennai',
@@ -186,7 +190,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-09',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Salem',
     searchFrom: 'Chennai',
@@ -201,7 +205,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-10',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Chennai',
     to: 'Trichy',
     searchFrom: 'Chennai',
@@ -217,7 +221,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-11',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Chennai',
     searchFrom: 'Coimbatore',
@@ -233,7 +237,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-12',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Madurai',
     searchFrom: 'Coimbatore',
@@ -248,7 +252,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-13',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Tirunelveli',
     searchFrom: 'Coimbatore',
@@ -263,7 +267,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-14',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Nagercoil',
     searchFrom: 'Coimbatore',
@@ -278,7 +282,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-15',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Thoothukudi',
     searchFrom: 'Coimbatore',
@@ -293,7 +297,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-16',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Rameswaram',
     searchFrom: 'Coimbatore',
@@ -308,7 +312,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-17',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Tiruchendur',
     searchFrom: 'Coimbatore',
@@ -323,7 +327,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-18',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Trichy',
     searchFrom: 'Coimbatore',
@@ -338,7 +342,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-19',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Thanjavur',
     searchFrom: 'Coimbatore',
@@ -353,7 +357,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-tn-20',
-    category: 'tn',
+    category: 'tamilnadu',
     from: 'Coimbatore',
     to: 'Salem',
     searchFrom: 'Coimbatore',
@@ -372,7 +376,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   // ============================================================================
   {
     id: 'route-ka-01',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Coimbatore',
     to: 'Bengaluru',
     searchFrom: 'Coimbatore',
@@ -388,7 +392,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-02',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Coimbatore',
     to: 'Mysuru',
     searchFrom: 'Coimbatore',
@@ -403,7 +407,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-03',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Coimbatore',
     to: 'Mangaluru',
     searchFrom: 'Coimbatore',
@@ -418,7 +422,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-04',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Chennai',
     to: 'Bengaluru',
     searchFrom: 'Chennai',
@@ -434,7 +438,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-05',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Madurai',
     searchFrom: 'Bengaluru',
@@ -450,7 +454,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-06',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Tirunelveli',
     searchFrom: 'Bengaluru',
@@ -465,7 +469,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-07',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Nagercoil',
     searchFrom: 'Bengaluru',
@@ -481,7 +485,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-08',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Salem',
     searchFrom: 'Bengaluru',
@@ -496,7 +500,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-09',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Erode',
     searchFrom: 'Bengaluru',
@@ -511,7 +515,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-10',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Tiruppur',
     searchFrom: 'Bengaluru',
@@ -526,7 +530,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-11',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Trichy',
     searchFrom: 'Bengaluru',
@@ -541,7 +545,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-12',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Thanjavur',
     searchFrom: 'Bengaluru',
@@ -556,7 +560,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-13',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Tenkasi',
     searchFrom: 'Bengaluru',
@@ -572,7 +576,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-14',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Thoothukudi',
     searchFrom: 'Bengaluru',
@@ -587,7 +591,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-15',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Rameswaram',
     searchFrom: 'Bengaluru',
@@ -602,7 +606,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-16',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Hosur',
     searchFrom: 'Bengaluru',
@@ -617,7 +621,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-17',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Mysuru',
     searchFrom: 'Bengaluru',
@@ -632,7 +636,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-18',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Mangaluru',
     searchFrom: 'Bengaluru',
@@ -647,7 +651,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-19',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Belagavi',
     searchFrom: 'Bengaluru',
@@ -662,7 +666,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ka-20',
-    category: 'ka',
+    category: 'karnataka',
     from: 'Bengaluru',
     to: 'Hubballi',
     searchFrom: 'Bengaluru',
@@ -681,7 +685,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   // ============================================================================
   {
     id: 'route-kl-01',
-    category: 'kl',
+    category: 'kerala',
     from: 'Coimbatore',
     to: 'Kochi / Ernakulam',
     searchFrom: 'Coimbatore',
@@ -697,7 +701,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-02',
-    category: 'kl',
+    category: 'kerala',
     from: 'Coimbatore',
     to: 'Thrissur',
     searchFrom: 'Coimbatore',
@@ -712,7 +716,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-03',
-    category: 'kl',
+    category: 'kerala',
     from: 'Coimbatore',
     to: 'Kozhikode',
     searchFrom: 'Coimbatore',
@@ -727,7 +731,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-04',
-    category: 'kl',
+    category: 'kerala',
     from: 'Coimbatore',
     to: 'Thiruvananthapuram',
     searchFrom: 'Coimbatore',
@@ -742,7 +746,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-05',
-    category: 'kl',
+    category: 'kerala',
     from: 'Chennai',
     to: 'Kochi / Ernakulam',
     searchFrom: 'Chennai',
@@ -758,7 +762,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-06',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Kochi / Ernakulam',
     searchFrom: 'Bengaluru',
@@ -774,7 +778,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-07',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Thrissur',
     searchFrom: 'Bengaluru',
@@ -789,7 +793,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-08',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Kozhikode',
     searchFrom: 'Bengaluru',
@@ -804,7 +808,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-09',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Kannur',
     searchFrom: 'Bengaluru',
@@ -819,7 +823,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-10',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Palakkad',
     searchFrom: 'Bengaluru',
@@ -834,7 +838,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-11',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Thiruvananthapuram',
     searchFrom: 'Bengaluru',
@@ -850,7 +854,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-12',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Kollam',
     searchFrom: 'Bengaluru',
@@ -865,7 +869,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-kl-13',
-    category: 'kl',
+    category: 'kerala',
     from: 'Bengaluru',
     to: 'Kottayam',
     searchFrom: 'Bengaluru',
@@ -884,7 +888,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   // ============================================================================
   {
     id: 'route-ap-01',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Chennai',
     to: 'Hyderabad',
     searchFrom: 'Chennai',
@@ -900,7 +904,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-02',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Coimbatore',
     to: 'Hyderabad',
     searchFrom: 'Coimbatore',
@@ -915,7 +919,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-03',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Hyderabad',
     searchFrom: 'Bengaluru',
@@ -931,7 +935,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-04',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Vijayawada',
     searchFrom: 'Bengaluru',
@@ -946,7 +950,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-05',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Visakhapatnam',
     searchFrom: 'Bengaluru',
@@ -961,7 +965,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-06',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Tirupati',
     searchFrom: 'Bengaluru',
@@ -977,7 +981,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-07',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Guntur',
     searchFrom: 'Bengaluru',
@@ -992,7 +996,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-08',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Kurnool',
     searchFrom: 'Bengaluru',
@@ -1007,7 +1011,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-ap-09',
-    category: 'ap_ts',
+    category: 'andhra_telangana',
     from: 'Bengaluru',
     to: 'Nellore',
     searchFrom: 'Bengaluru',
@@ -1026,7 +1030,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   // ============================================================================
   {
     id: 'route-west-01',
-    category: 'west',
+    category: 'pan_india',
     from: 'Coimbatore',
     to: 'Goa',
     searchFrom: 'Coimbatore',
@@ -1042,7 +1046,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-02',
-    category: 'west',
+    category: 'pan_india',
     from: 'Coimbatore',
     to: 'Mumbai',
     searchFrom: 'Coimbatore',
@@ -1057,7 +1061,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-03',
-    category: 'west',
+    category: 'pan_india',
     from: 'Coimbatore',
     to: 'Pune',
     searchFrom: 'Coimbatore',
@@ -1072,7 +1076,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-04',
-    category: 'west',
+    category: 'pan_india',
     from: 'Bengaluru',
     to: 'Goa',
     searchFrom: 'Bengaluru',
@@ -1088,7 +1092,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-05',
-    category: 'west',
+    category: 'pan_india',
     from: 'Bengaluru',
     to: 'Mumbai',
     searchFrom: 'Bengaluru',
@@ -1104,7 +1108,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-06',
-    category: 'west',
+    category: 'pan_india',
     from: 'Bengaluru',
     to: 'Pune',
     searchFrom: 'Bengaluru',
@@ -1120,7 +1124,7 @@ export const OPERATIONAL_CARAVAN_ROUTES = [
   },
   {
     id: 'route-west-07',
-    category: 'west',
+    category: 'pan_india',
     from: 'Bengaluru',
     to: 'Shirdi',
     searchFrom: 'Bengaluru',
